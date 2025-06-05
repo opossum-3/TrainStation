@@ -8,6 +8,7 @@ class BasicVector
 {
 public:
 	BasicVector();
+	BasicVector(size_t size);
 	BasicVector(const BasicVector& other);
 	BasicVector& operator= (const BasicVector& other);
 	~BasicVector();
@@ -35,6 +36,18 @@ template<typename T>
 BasicVector<T>::BasicVector() : size(0), capacity(1)
 {
 	items = new T[capacity];
+}
+
+template<typename T>
+BasicVector<T>::BasicVector(size_t size)
+{
+	capacity = 1;
+	while (capacity < size)
+	{
+		capacity *= 2;
+	}
+	items = new T[capacity];
+	this->size = size;
 }
 
 template<typename T>
