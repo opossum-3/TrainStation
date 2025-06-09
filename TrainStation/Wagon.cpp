@@ -2,12 +2,13 @@
 
 Wagon::Wagon() : wagonId(0), basePrice(0), seats()
 {
-	
+
 }
 
-Wagon::Wagon(unsigned wagonId, unsigned basePrice, size_t seatCount) : wagonId(wagonId), basePrice(basePrice)
+Wagon::Wagon(unsigned wagonId, unsigned basePrice) : wagonId(wagonId), 
+													 basePrice(basePrice)
 {
-	seats = BasicVector<bool>(seatCount);
+	
 }
 
 unsigned Wagon::getWagonId() const
@@ -18,4 +19,90 @@ unsigned Wagon::getWagonId() const
 size_t Wagon::getSeatCount() const
 {
 	return seats.getSize();
+}
+
+void Wagon::printSeats(size_t rows) const
+{
+	size_t count = seats.getSize();
+	size_t cols = count / rows;
+	size_t space = cols * 2 + (cols - 1);
+	
+	// Extra space for Sleep Wagon
+	if (cols == 1)
+	{
+		space += 2;
+	}
+	std::cout << ' ';
+	for (size_t i = 0; i < space; i++)
+	{
+		std::cout << '_';
+	}
+	std::cout << std::endl;
+
+	for (size_t i = 0; i < rows; i++)
+	{
+		// Printing seat row
+		std::cout << '|';
+		for (size_t j = 0; j < cols; j++)
+		{
+			if (cols == 1)
+			{
+				std::cout << ' ';
+			}
+			size_t index = i * cols + j;
+			if (seats[index])
+			{
+				std::cout << "XX";
+			}
+			else
+			{
+				printSeatNum(index + 1);
+			}
+
+			if (j < cols - 1 || cols == 1)
+			{
+				std::cout << ' ';
+			}
+		}
+		std::cout << '|' << std::endl;
+
+		// Printing empty row
+		std::cout << '|';
+		if (i < rows - 1)
+		{
+			for (size_t i = 0; i < space; i++)
+			{
+				std::cout << ' ';
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < space; i++)
+			{
+				std::cout << '_';
+			}
+		}
+		std::cout << '|' << std::endl;
+	}
+}
+
+void Wagon::printSeatNum(size_t number) const
+{
+	if (number < 10)
+	{
+		std::cout << '0' << number;
+	}
+	else if (number < 100)
+	{
+		std::cout << number;
+	}
+}
+
+void Wagon::clearSeats()
+{
+	size_t count = seats.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		seats[i] = false;
+	}
 }

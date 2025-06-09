@@ -109,20 +109,6 @@ void BasicVector<T>::removeAt(size_t index)
 	size--;
 }
 
-template<>
-void BasicVector<int>::serialize(std::ofstream& ofstr) const
-{
-	if (!ofstr.is_open())
-	{
-		throw std::exception("File error!");
-	}
-	ofstr.write(reinterpret_cast<const char*>(&size), sizeof(size));
-	for (size_t i = 0; i < size; i++)
-	{
-		ofstr.write(reinterpret_cast<const char*>(&items[i]), sizeof(int));
-	}
-}
-
 template<typename T>
 void BasicVector<T>::serialize(std::ofstream& ofstr) const
 {
@@ -133,24 +119,7 @@ void BasicVector<T>::serialize(std::ofstream& ofstr) const
 	ofstr.write(reinterpret_cast<const char*>(&size), sizeof(size));
 	for (size_t i = 0; i < size; i++)
 	{
-		items[i].serialize(ofstr);
-	}
-}
-
-template<>
-void BasicVector<int>::deserialize(std::ifstream& ifstr)
-{
-	if (!ifstr.is_open())
-	{
-		throw std::exception("File error!");
-	}
-	size_t newSize = 0;
-	ifstr.read(reinterpret_cast<char*>(&newSize), sizeof(newSize));
-	for (size_t i = 0; i < newSize; i++)
-	{
-		int current = 0;
-		ifstr.read(reinterpret_cast<char*>(&current), sizeof(int));
-		push_back(current);
+		ofstr.write(reinterpret_cast<const char*>(&items[i]), sizeof(T));
 	}
 }
 
@@ -165,8 +134,8 @@ void BasicVector<T>::deserialize(std::ifstream& ifstr)
 	ifstr.read(reinterpret_cast<char*>(&newSize), sizeof(newSize));
 	for (size_t i = 0; i < newSize; i++)
 	{
-		T current;
-		current.deserialize(ifstr);
+		int current = 0;
+		ifstr.read(reinterpret_cast<char*>(&current), sizeof(T));
 		push_back(current);
 	}
 }
