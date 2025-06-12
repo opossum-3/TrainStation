@@ -40,6 +40,19 @@ BasicString::~BasicString()
 	free();
 }
 
+BasicString BasicString::repeat(char symbol, size_t times)
+{
+	char* data = new char[times + 1];
+	for (size_t i = 0; i < times; i++)
+	{
+		data[i] = symbol;
+	}
+	data[times] = '\0';
+	BasicString result(data);
+	delete[] data;
+	return result;
+}
+
 void BasicString::copy(const BasicString& other)
 {
 	length = other.length;

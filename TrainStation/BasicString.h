@@ -12,6 +12,7 @@ public:
 	BasicString(const BasicString& other);
 	const BasicString& operator= (const BasicString& other);
 	~BasicString();
+	static BasicString repeat(char symbol, size_t times);
 	char& operator[] (size_t index);
 	char operator[] (size_t index) const;
 	size_t getLength() const;

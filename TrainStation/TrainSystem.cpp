@@ -33,7 +33,38 @@ void TrainSystem::start()
     }
     catch (std::exception& e)
     {
-        std::cout << e.what();
+        std::cout << e.what() << std::endl;
+    }
+    while (true)
+    {
+        try
+        {
+            BasicString command;
+            std::cin >> command;
+            if (command.equals("exit"))
+            {
+                break;
+            }
+            if (command.equals("print-stations"))
+            {
+                printStations();
+                continue;
+            }
+            throw std::exception("Invalid command!");
+        }
+        catch(std::exception& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    }
+}
+
+void TrainSystem::printStations() const
+{
+    size_t count = stations.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        std::cout << stations[i].getName() << std::endl;
     }
 }
 

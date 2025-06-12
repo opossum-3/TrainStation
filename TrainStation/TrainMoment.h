@@ -1,5 +1,6 @@
 #pragma once
 #include <ctime>
+#include "BasicString.h"
 
 class Station;
 class TrainMoment
@@ -10,6 +11,7 @@ public:
 	Station* getStation() const;
 	unsigned getTrack() const;
 	time_t getTime() const;
+	BasicString getFormattedTime() const;
 private:
 	Station* station;
 	unsigned track;

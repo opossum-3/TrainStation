@@ -9,7 +9,7 @@ public:
 	static TrainSystem* instance();
 	TrainSystem(const TrainSystem& other) = delete;
 	void start();
-
+	void printStations() const;
 private:
 	static TrainSystem* system;
 	TrainSystem();

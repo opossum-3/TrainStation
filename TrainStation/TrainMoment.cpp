@@ -1,4 +1,7 @@
 #include "TrainMoment.h"
+#include "BasicString.h"
+
+const int TIME_FORMAT_BUFFER_SIZE = 30;
 
 TrainMoment::TrainMoment() : station(nullptr), track(0), time(0)
 {
@@ -25,4 +28,13 @@ unsigned TrainMoment::getTrack() const
 time_t TrainMoment::getTime() const
 {
     return time;
+}
+
+BasicString TrainMoment::getFormattedTime() const
+{
+    tm timeData;
+    localtime_s(&timeData, &time);
+    char buffer[TIME_FORMAT_BUFFER_SIZE] = { 0 };
+    strftime(buffer, TIME_FORMAT_BUFFER_SIZE, "%d/%m/%Y %H:%M", &timeData);
+    return BasicString(buffer);
 }
