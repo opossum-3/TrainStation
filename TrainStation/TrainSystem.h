@@ -15,6 +15,9 @@ private:
 	TrainSystem();
 	BasicVector<Station> stations;
 	BasicVector<Admin> admins;
-
+	Admin* loggedAdmin;
 	void loadAdmins();
+	void checkForCommandEnd(BasicString command, int& readIndex);
+	void loginAdmin(BasicString& username, BasicString& password);
+	void checkForAdmin();
 };

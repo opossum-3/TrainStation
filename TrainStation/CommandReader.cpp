@@ -86,7 +86,7 @@ BasicString CommandReader::readName(const BasicString& str, int& readIndex)
 			break;
 		}
 		endIndex = i + 1;
-		if (i > readIndex && !isSmallLetter(str[i]))
+		if (i > readIndex && !(isLetter(str[i]) || str[i] == '_'))
 		{
 			throw std::exception("Invalid name format!");
 		}
@@ -211,5 +211,5 @@ bool CommandReader::isLetter(char c)
 
 bool CommandReader::isValidPassSymbol(char c)
 {
-	return isDigit(c) || isLetter(c);
+	return isDigit(c) || isLetter(c) || c == '_' || c == '.';
 }

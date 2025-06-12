@@ -1,4 +1,5 @@
 #include "TrainSystem.h"
+#include "CommandReader.h"
 #include <fstream>
 #include <iostream>
 
@@ -25,8 +26,40 @@ void TrainSystem::loadAdmins()
     ifstr.close();
 }
 
+void TrainSystem::checkForCommandEnd(BasicString command, int& readIndex)
+{
+    if (!CommandReader::isCompleted(command, readIndex))
+    {
+        throw std::exception("Invalid command format!");
+    }
+}
+
+void TrainSystem::loginAdmin(BasicString& username, BasicString& password)
+{
+    size_t count = admins.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        if (admins[i].getName() == username && admins[i].isPasswordCorrect(password))
+        {
+            loggedAdmin = &admins[i];
+            std::cout << "Welcome back, " << username << '!' << std::endl;
+            return;
+        }
+    }
+    throw std::exception("Wrong username or password!");
+}
+
+void TrainSystem::checkForAdmin()
+{
+    if (!loggedAdmin)
+    {
+        throw std::exception("You need to be an admin to run this command!");
+    }
+}
+
 void TrainSystem::start()
 {
+    loggedAdmin = nullptr;
     try
     {
         loadAdmins();
@@ -50,6 +83,31 @@ void TrainSystem::start()
                 printStations();
                 continue;
             }
+            if (command.startsWith("login"))
+            {
+                if (loggedAdmin)
+                {
+                    throw std::exception("An admin is already logged. Please logout first.");
+                }
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("login ", readIndex);
+                BasicString username = CommandReader::readName(command, readIndex);
+                readIndex++;
+                BasicString password = CommandReader::readPassword(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                loginAdmin(username, password);
+                continue;
+            }
+            if (command.equals("logout"))
+            {
+                if (!loggedAdmin)
+                {
+                    throw std::exception("No user is currently logged.");
+                }
+                loggedAdmin = nullptr;
+                continue;
+            }
+
             throw std::exception("Invalid command!");
         }
         catch(std::exception& e)
