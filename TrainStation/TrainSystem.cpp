@@ -49,6 +49,20 @@ void TrainSystem::loginAdmin(BasicString& username, BasicString& password)
     throw std::exception("Wrong username or password!");
 }
 
+void TrainSystem::addStation(BasicString& name)
+{
+    size_t count = stations.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        if (stations[i].getName() == name)
+        {
+            throw std::exception("Station with this name already exists!");
+        }
+    }
+    Station station(name);
+    stations.push_back(station);
+}
+
 void TrainSystem::checkForAdmin()
 {
     if (!loggedAdmin)
@@ -107,7 +121,16 @@ void TrainSystem::start()
                 loggedAdmin = nullptr;
                 continue;
             }
-
+            if (command.startsWith("add-station"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("add-station ", readIndex);
+                BasicString stationName = CommandReader::readName(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                addStation(stationName);
+                continue;
+            }
             throw std::exception("Invalid command!");
         }
         catch(std::exception& e)
