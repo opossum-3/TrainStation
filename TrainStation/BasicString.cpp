@@ -92,7 +92,7 @@ std::istream& operator>> (std::istream& istr, BasicString& myStr)
 {
 	myStr.free();
 	myStr.str = new char[BasicString::BUFFER_SIZE];
-	std::cin.getline(myStr.str, BasicString::BUFFER_SIZE);
+	istr.getline(myStr.str, BasicString::BUFFER_SIZE);
 	myStr.length = strlen(myStr.str);
 	return istr;
 }

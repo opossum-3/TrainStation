@@ -1,14 +1,20 @@
 #pragma once
 #include "BasicVector.hpp"
 #include "Station.h"
+#include "Admin.h"
 
 class TrainSystem
 {
 public:
-	TrainSystem(const TrainSystem& other) = delete;
 	static TrainSystem* instance();
-	static TrainSystem* system;
+	TrainSystem(const TrainSystem& other) = delete;
+	void start();
+
 private:
+	static TrainSystem* system;
 	TrainSystem();
 	BasicVector<Station> stations;
+	BasicVector<Admin> admins;
+
+	void loadAdmins();
 };
