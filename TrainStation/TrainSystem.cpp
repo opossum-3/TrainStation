@@ -2,6 +2,7 @@
 #include "CommandReader.h"
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 TrainSystem* TrainSystem::system;
 
@@ -61,6 +62,20 @@ void TrainSystem::addStation(BasicString& name)
     std::cout << "Added station " << name << '!' << std::endl;
 }
 
+void TrainSystem::addTrain(BasicString& station, BasicString& destination, double distance, double speed, time_t departureTime)
+{
+    Station* departureStation = findStation(station);
+    Station* arrivalStation = findStation(destination);
+    if (departureStation == nullptr || arrivalStation == nullptr)
+    {
+        throw std::exception("Invalid station name!");
+    }
+    if (departureStation == arrivalStation)
+    {
+        throw std::exception("Departure and arrival stations cannot be the same!");
+    }
+}
+
 void TrainSystem::checkForAdmin()
 {
     if (!loggedAdmin)
@@ -72,7 +87,7 @@ void TrainSystem::checkForAdmin()
 void TrainSystem::start()
 {
     loggedAdmin = nullptr;
-    lastTrainId = 1000;
+    currentTrainId = 1000;
     try
     {
         loadAdmins();
@@ -130,6 +145,24 @@ void TrainSystem::start()
                 addStation(stationName);
                 continue;
             }
+            if (command.startsWith("add-train"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("add_train ", readIndex);
+                BasicString station = CommandReader::readName(command, readIndex);
+                readIndex++;
+                BasicString destination = CommandReader::readName(command, readIndex);
+                readIndex++;
+                double distance = CommandReader::readDouble(command, readIndex);
+                readIndex++;
+                double speed = CommandReader::readDouble(command, readIndex);
+                readIndex++;
+                time_t departureTime = CommandReader::readDateTime(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+
+                continue;
+            }
             throw std::exception("Invalid command!");
         }
         catch(std::exception& e)
@@ -160,6 +193,7 @@ unsigned TrainSystem::getMaxTrainId() const
             max = current;
         }
     }
+    return max;
 }
 
 Station* TrainSystem::findStation(BasicString& name)

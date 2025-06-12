@@ -11,6 +11,8 @@ public:
 	Station(BasicString name);
 	const BasicString& getName() const;
 	void printSchedule() const;
+	void addTrain(unsigned trainId, Station* destination,
+				  double distance, double speed, time_t departureTime);
 	unsigned getMaxTrainId() const;
 private:
 	BasicString name;

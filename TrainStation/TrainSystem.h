@@ -22,6 +22,8 @@ private:
 	void checkForAdmin();
 	void loginAdmin(BasicString& username, BasicString& password);
 	void addStation(BasicString& name);
+	void addTrain(BasicString& station, BasicString& destination,
+				  double distance, double speed, time_t departureTime);
 	void printStations() const;
 	unsigned getMaxTrainId() const;
 
