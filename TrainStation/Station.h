@@ -11,6 +11,7 @@ public:
 	Station(BasicString name);
 	const BasicString& getName() const;
 	void printSchedule() const;
+	unsigned getMaxTrainId() const;
 private:
 	BasicString name;
 	BasicVector<Track> tracks;

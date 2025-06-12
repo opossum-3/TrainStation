@@ -13,6 +13,11 @@ Train::Train(unsigned id, TrainMoment departure, TrainMoment arrival,
 	
 }
 
+unsigned Train::getId() const
+{
+	return trainId;
+}
+
 const TrainMoment& Train::getDeparture() const
 {
 	return departure;

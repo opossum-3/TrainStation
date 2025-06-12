@@ -5,7 +5,7 @@
 
 TrainSystem* TrainSystem::system;
 
-TrainSystem::TrainSystem()
+TrainSystem::TrainSystem() : loggedAdmin(nullptr)
 {
 
 }
@@ -72,6 +72,7 @@ void TrainSystem::checkForAdmin()
 void TrainSystem::start()
 {
     loggedAdmin = nullptr;
+    lastTrainId = 1000;
     try
     {
         loadAdmins();
@@ -144,6 +145,20 @@ void TrainSystem::printStations() const
     for (size_t i = 0; i < count; i++)
     {
         std::cout << stations[i].getName() << std::endl;
+    }
+}
+
+unsigned TrainSystem::getMaxTrainId() const
+{
+    unsigned max = 0;
+    size_t stationCount = stations.getSize();
+    for (size_t i = 0; i < stationCount; i++)
+    {
+        unsigned current = stations[i].getMaxTrainId();
+        if (current > max)
+        {
+            max = current;
+        }
     }
 }
 

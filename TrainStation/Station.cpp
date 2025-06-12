@@ -23,6 +23,21 @@ void Station::printSchedule() const
 	printDepartures();
 }
 
+unsigned Station::getMaxTrainId() const
+{
+	unsigned max = 0;
+	size_t count = departureTrains.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		unsigned current = departureTrains[i].getId();
+		if (current > max)
+		{
+			max = current;
+		}
+	}
+	return max;
+}
+
 void Station::printArrivals() const
 {
 	std::cout << "Arrivals: " << std::endl;
