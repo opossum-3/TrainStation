@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdexcept>
+#include <ctime>
 #include "BasicString.h"
 
 class CommandReader
@@ -12,7 +13,8 @@ public:
 	static BasicString readName(const BasicString& str, int& readIndex);
 	static BasicString readPassword(const BasicString& str, int& readIndex);
 	static BasicString readWord(const BasicString& str, int& readIndex);
-	static BasicString readToEnd(const BasicString str, int& readIndex);
+	static BasicString readToEnd(const BasicString& str, int& readIndex);
+	static time_t readDateTime(const BasicString& str, int& readIndex);
 	static void moveIndexByLength(const char* str, int& readIndex);
 	static bool isCompleted(const BasicString& str, int& readIndex);
 	static bool isDigit(char c);
@@ -20,4 +22,6 @@ public:
 	static bool isSmallLetter(char c);
 	static bool isLetter(char c);
 	static bool isValidPassSymbol(char c);
+private:
+	static void checkDateTimeFormat(const BasicString& str, int& readIndex);
 };

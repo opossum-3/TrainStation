@@ -157,7 +157,7 @@ BasicString CommandReader::readWord(const BasicString& str, int& readIndex)
 	return BasicString(result);
 }
 
-BasicString CommandReader::readToEnd(const BasicString str, int& readIndex)
+BasicString CommandReader::readToEnd(const BasicString& str, int& readIndex)
 {
 	size_t length = str.getLength();
 	if (readIndex < 0 || readIndex >= length)
@@ -173,6 +173,33 @@ BasicString CommandReader::readToEnd(const BasicString str, int& readIndex)
 	result[resultLength] = '\0';
 	readIndex = length;
 	return BasicString(result);
+}
+
+time_t CommandReader::readDateTime(const BasicString& str, int& readIndex)
+{
+	size_t length = str.getLength();
+	if (readIndex < 0 || readIndex >= length)
+	{
+		throw std::exception("Invalid string format!");
+	}
+	checkDateTimeFormat(str, readIndex);
+	int index = 0;
+	int day = (str[0] - TO_DIGIT) * 10 + (str[1] - TO_DIGIT);
+	int month = (str[3] - TO_DIGIT) * 10 + (str[4] - TO_DIGIT);
+	int year = (str[6] - TO_DIGIT) * 1000;
+	year += (str[7] - TO_DIGIT) * 100;
+	year += (str[8] - TO_DIGIT) * 10;
+	year += str[9] - TO_DIGIT;
+	int hours = (str[11] - TO_DIGIT) * 10 + (str[12] - TO_DIGIT);
+	int minutes = (str[14] - TO_DIGIT) * 10 + (str[15] - TO_DIGIT);
+	tm tm{};
+	tm.tm_year = year - 1900;
+	tm.tm_mon = month - 1;
+	tm.tm_mday = day;
+	tm.tm_hour = hours;
+	tm.tm_min = minutes;
+	time_t result = std::mktime(&tm);
+	return result;
 }
 
 void CommandReader::moveIndexByLength(const char* str, int& readIndex)
@@ -212,4 +239,29 @@ bool CommandReader::isLetter(char c)
 bool CommandReader::isValidPassSymbol(char c)
 {
 	return isDigit(c) || isLetter(c) || c == '_' || c == '.';
+}
+
+void CommandReader::checkDateTimeFormat(const BasicString& str, int& readIndex)
+{
+	size_t length = str.getLength();
+	BasicString format("01/01/2000 01:00");
+	size_t formatLength = format.getLength();
+	if (length - readIndex < formatLength)
+	{
+		throw std::exception("Invalid string format!");
+	}
+	for (size_t i = 0; i < formatLength; i++)
+	{
+		if (isDigit(str[readIndex + i]))
+		{
+			if (!isDigit(format[i]))
+			{
+				throw std::exception("Invalid string format!");
+			}
+		}
+		else if (str[readIndex + i] != format[i])
+		{
+			throw std::exception("Invalid string format!");
+		}
+	}
 }

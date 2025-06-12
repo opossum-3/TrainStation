@@ -51,16 +51,14 @@ void TrainSystem::loginAdmin(BasicString& username, BasicString& password)
 
 void TrainSystem::addStation(BasicString& name)
 {
-    size_t count = stations.getSize();
-    for (size_t i = 0; i < count; i++)
+    Station* searchResult = findStation(name);
+    if (searchResult)
     {
-        if (stations[i].getName() == name)
-        {
-            throw std::exception("Station with this name already exists!");
-        }
+        throw std::exception("Station with this name already exists!");
     }
     Station station(name);
     stations.push_back(station);
+    std::cout << "Added station " << name << '!' << std::endl;
 }
 
 void TrainSystem::checkForAdmin()
@@ -147,6 +145,19 @@ void TrainSystem::printStations() const
     {
         std::cout << stations[i].getName() << std::endl;
     }
+}
+
+Station* TrainSystem::findStation(BasicString& name)
+{
+    size_t count = stations.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        if (stations[i].getName() == name)
+        {
+            return &stations[i];
+        }
+    }
+    return nullptr;
 }
 
 TrainSystem* TrainSystem::instance()

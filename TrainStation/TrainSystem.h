@@ -21,4 +21,5 @@ private:
 	void loginAdmin(BasicString& username, BasicString& password);
 	void addStation(BasicString& name);
 	void printStations() const;
+	Station* findStation(BasicString& name);
 };
