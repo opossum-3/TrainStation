@@ -116,6 +116,15 @@ void TrainSystem::start()
                 printStations();
                 continue;
             }
+            if (command.startsWith("print-station"))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("print-station ", readIndex);
+                BasicString name = CommandReader::readName(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                printStation(name);
+                continue;
+            }
             if (command.startsWith("print-train"))
             {
                 int readIndex = 0;
@@ -193,6 +202,20 @@ void TrainSystem::printStations() const
     {
         std::cout << stations[i].getName() << std::endl;
     }
+}
+
+void TrainSystem::printStation(const BasicString& name) const
+{
+    size_t stationCount = stations.getSize();
+    for (size_t i = 0; i < stationCount; i++)
+    {
+        if (stations[i].getName() == name)
+        {
+            stations[i].printSchedule();
+            return;
+        }
+    }
+    throw std::exception("Invalid train station!");
 }
 
 void TrainSystem::printTrain(unsigned id) const

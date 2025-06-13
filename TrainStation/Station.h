@@ -21,6 +21,11 @@ private:
 	BasicVector<Track> tracks;
 	BasicVector<Train> departureTrains;
 	BasicVector<Train*> arrivingTrains;
+
+	static const char* arrivalHeaders[]; 
+	static size_t arrivalTableWidths[];
+
 	void printArrivals() const;
 	void printDepartures() const;
+	size_t getTableWidth(size_t columnWidths[], size_t count) const;
 };
