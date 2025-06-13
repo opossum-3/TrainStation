@@ -14,6 +14,26 @@ Train::Train(unsigned id, const TrainMoment& departure, const TrainMoment& arriv
 	
 }
 
+Train::Train(const Train& other)
+{
+	copy(other);
+}
+
+Train& Train::operator=(const Train& other)
+{
+	if (this != &other)
+	{
+		free();
+		copy(other);
+	}
+	return *this;
+}
+
+Train::~Train()
+{
+	free();
+}
+
 unsigned Train::getId() const
 {
 	return trainId;
@@ -40,4 +60,27 @@ void Train::print() const
 	std::cout << "Arrival Time: " << arrival.getFormattedTime() << std::endl;
 	std::cout << "Departure Platform: " << departure.getTrack() + 1 << std::endl;
 	std::cout << std::endl << "Wagons: " << std::endl;
+}
+
+void Train::copy(const Train& other)
+{
+	trainId = other.trainId;
+	departure = other.departure;
+	arrival = other.arrival;
+	distance = other.distance;
+	speed = other.speed;
+	size_t count = other.wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		wagons.push_back(other.wagons[i]);
+	}
+}
+
+void Train::free()
+{
+	size_t count = wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		delete[] wagons[i];
+	}
 }

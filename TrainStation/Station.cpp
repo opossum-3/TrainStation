@@ -47,6 +47,20 @@ void Station::addTrain(unsigned trainId, Station* destination,
 	destination->arrivingTrains.push_back(last);
 }
 
+bool Station::tryRemoveTrain(unsigned trainId)
+{
+	size_t count = departureTrains.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (departureTrains[i].getId() == trainId)
+		{
+			departureTrains.removeAt(i);
+			return true;
+		}
+	}
+	return false;
+}
+
 unsigned Station::getMaxTrainId() const
 {
 	unsigned max = 0;

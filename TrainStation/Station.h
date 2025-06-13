@@ -13,6 +13,7 @@ public:
 	void printSchedule() const;
 	void addTrain(unsigned trainId, Station* destination,
 				  double distance, double speed, time_t departureTime);
+	bool tryRemoveTrain(unsigned trainId);
 	unsigned getMaxTrainId() const;
 	unsigned getFreeTrack(const TimeInterval& interval);
 	const Train* findTrain(unsigned trainId) const;

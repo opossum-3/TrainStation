@@ -14,6 +14,7 @@ protected:
 	unsigned wagonId;
 	unsigned basePrice;
 	BasicVector<bool> seats;
+
 	void printSeats(size_t rows) const;
 	virtual size_t getRowsCount() const = 0;
 	void printSeatNum(size_t number) const;

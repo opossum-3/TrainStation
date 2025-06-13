@@ -83,6 +83,20 @@ void TrainSystem::addTrain(BasicString& station, BasicString& destination,
     std::cout << "Train successfully added with ID: " << currentTrainId - 1 << std::endl;
 }
 
+void TrainSystem::removeTrain(unsigned id)
+{
+    size_t count = stations.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        if (stations[i].tryRemoveTrain(id))
+        {
+            std::cout << "Train with ID: " << id << " successfully removed." << std::endl;
+            return;
+        }
+    }
+    throw std::exception("Invalid train ID!");
+}
+
 void TrainSystem::checkForAdmin()
 {
     if (!loggedAdmin)
@@ -172,7 +186,7 @@ void TrainSystem::start()
             {
                 checkForAdmin();
                 int readIndex = 0;
-                CommandReader::moveIndexByLength("add_train ", readIndex);
+                CommandReader::moveIndexByLength("add-train ", readIndex);
                 BasicString station = CommandReader::readName(command, readIndex);
                 readIndex++;
                 BasicString destination = CommandReader::readName(command, readIndex);
@@ -184,6 +198,16 @@ void TrainSystem::start()
                 time_t departureTime = CommandReader::readDateTime(command, readIndex);
                 checkForCommandEnd(command, readIndex);
                 addTrain(station, destination, distance, speed, departureTime);
+                continue;
+            }
+            if (command.startsWith("remove-train"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("remove-train ", readIndex);
+                unsigned id = CommandReader::readUnsigned(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                removeTrain(id);
                 continue;
             }
             throw std::exception("Invalid command!");
