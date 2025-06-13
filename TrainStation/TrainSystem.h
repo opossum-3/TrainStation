@@ -25,6 +25,7 @@ private:
 	void addTrain(BasicString& station, BasicString& destination,
 				  double distance, double speed, time_t departureTime);
 	void printStations() const;
+	void printTrain(unsigned id) const;
 	unsigned getMaxTrainId() const;
 
 	Station* findStation(BasicString& name);

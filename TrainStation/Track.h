@@ -6,8 +6,9 @@ class Track
 {
 public:
 	Track();
-	void addInterval(time_t start, time_t end);
+	void addInterval(const TimeInterval& interval);
 	bool isFree(time_t time) const;
+	bool isFreeInterval(const TimeInterval& interval) const;
 private:
 	BasicVector<TimeInterval> busyIntervals;
 };

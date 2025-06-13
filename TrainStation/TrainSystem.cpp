@@ -6,7 +6,7 @@
 
 TrainSystem* TrainSystem::system;
 
-TrainSystem::TrainSystem() : loggedAdmin(nullptr)
+TrainSystem::TrainSystem() : loggedAdmin(nullptr), currentTrainId(1000)
 {
 
 }
@@ -62,7 +62,8 @@ void TrainSystem::addStation(BasicString& name)
     std::cout << "Added station " << name << '!' << std::endl;
 }
 
-void TrainSystem::addTrain(BasicString& station, BasicString& destination, double distance, double speed, time_t departureTime)
+void TrainSystem::addTrain(BasicString& station, BasicString& destination, 
+                           double distance, double speed, time_t departureTime)
 {
     Station* departureStation = findStation(station);
     Station* arrivalStation = findStation(destination);
@@ -74,6 +75,12 @@ void TrainSystem::addTrain(BasicString& station, BasicString& destination, doubl
     {
         throw std::exception("Departure and arrival stations cannot be the same!");
     }
+    if (distance == 0 || speed == 0)
+    {
+        throw std::exception("Invalid distance or speed parameters!");
+    }
+    departureStation->addTrain(currentTrainId++, arrivalStation, distance, speed, departureTime);
+    std::cout << "Train successfully added with ID: " << currentTrainId - 1 << std::endl;
 }
 
 void TrainSystem::checkForAdmin()
@@ -86,8 +93,6 @@ void TrainSystem::checkForAdmin()
 
 void TrainSystem::start()
 {
-    loggedAdmin = nullptr;
-    currentTrainId = 1000;
     try
     {
         loadAdmins();
@@ -109,6 +114,15 @@ void TrainSystem::start()
             if (command.equals("print-stations"))
             {
                 printStations();
+                continue;
+            }
+            if (command.startsWith("print-train"))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("print-train ", readIndex);
+                unsigned id = CommandReader::readUnsigned(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                printTrain(id);
                 continue;
             }
             if (command.startsWith("login"))
@@ -160,7 +174,7 @@ void TrainSystem::start()
                 readIndex++;
                 time_t departureTime = CommandReader::readDateTime(command, readIndex);
                 checkForCommandEnd(command, readIndex);
-
+                addTrain(station, destination, distance, speed, departureTime);
                 continue;
             }
             throw std::exception("Invalid command!");
@@ -179,6 +193,21 @@ void TrainSystem::printStations() const
     {
         std::cout << stations[i].getName() << std::endl;
     }
+}
+
+void TrainSystem::printTrain(unsigned id) const
+{
+    size_t stationCount = stations.getSize();
+    for (size_t i = 0; i < stationCount; i++)
+    {
+        const Train* train = stations[i].findTrain(id);
+        if (train)
+        {
+            train->print();
+            return;
+        }
+    }
+    throw std::exception("Invalid train ID!");
 }
 
 unsigned TrainSystem::getMaxTrainId() const

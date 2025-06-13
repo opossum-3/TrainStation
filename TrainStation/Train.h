@@ -8,10 +8,12 @@ class Train
 {
 public:
 	Train();
-	Train(unsigned id, TrainMoment departure, TrainMoment arrival,
+	Train(unsigned id, const TrainMoment& departure, const TrainMoment& arrival,
 		 double distance, double speed);
+	unsigned getId() const;
 	const TrainMoment& getDeparture() const;
 	const TrainMoment& getArrival() const;
+	void print() const;
 private:
 	unsigned trainId;
 	TrainMoment departure;

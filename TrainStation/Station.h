@@ -14,6 +14,8 @@ public:
 	void addTrain(unsigned trainId, Station* destination,
 				  double distance, double speed, time_t departureTime);
 	unsigned getMaxTrainId() const;
+	unsigned getFreeTrack(const TimeInterval& interval);
+	const Train* findTrain(unsigned trainId) const;
 private:
 	BasicString name;
 	BasicVector<Track> tracks;

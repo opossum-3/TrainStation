@@ -183,15 +183,17 @@ time_t CommandReader::readDateTime(const BasicString& str, int& readIndex)
 		throw std::exception("Invalid string format!");
 	}
 	checkDateTimeFormat(str, readIndex);
-	int index = 0;
-	int day = (str[0] - TO_DIGIT) * 10 + (str[1] - TO_DIGIT);
-	int month = (str[3] - TO_DIGIT) * 10 + (str[4] - TO_DIGIT);
-	int year = (str[6] - TO_DIGIT) * 1000;
-	year += (str[7] - TO_DIGIT) * 100;
-	year += (str[8] - TO_DIGIT) * 10;
-	year += str[9] - TO_DIGIT;
-	int hours = (str[11] - TO_DIGIT) * 10 + (str[12] - TO_DIGIT);
-	int minutes = (str[14] - TO_DIGIT) * 10 + (str[15] - TO_DIGIT);
+	int i = readIndex;
+	int day = (str[i] - TO_DIGIT) * 10 + (str[i + 1] - TO_DIGIT);
+	int month = (str[i + 3] - TO_DIGIT) * 10 + (str[i + 4] - TO_DIGIT);
+	int year = (str[i + 6] - TO_DIGIT) * 1000;
+	year += (str[i + 7] - TO_DIGIT) * 100;
+	year += (str[i + 8] - TO_DIGIT) * 10;
+	year += str[i + 9] - TO_DIGIT;
+	int hours = (str[i + 11] - TO_DIGIT) * 10 + (str[i + 12] - TO_DIGIT);
+	int minutes = (str[i + 14] - TO_DIGIT) * 10 + (str[i + 15] - TO_DIGIT);
+	moveIndexByLength("01/01/2000 01:00", readIndex);
+
 	tm tm{};
 	tm.tm_year = year - 1900;
 	tm.tm_mon = month - 1;
