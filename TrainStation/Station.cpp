@@ -4,8 +4,11 @@
 
 const char* Station::arrivalHeaders[] = {"Arrival Time", "Arrival Platform",
 		"Train ID", "Starting station" , "Status" };
+const char* Station::departureHeaders[] = { "Departure Time", "Arrival Time",
+		"Destination", "Departure Platform", "Train ID", "Status" };
 
 size_t Station::arrivalTableWidths[] = { 20, 20, 12, 16, 14 };
+size_t Station::departureTableWidths[] = { 20, 20, 16, 20, 12, 14 };
 
 Station::Station()
 {
@@ -116,7 +119,7 @@ void Station::printArrivals() const
 		std::cout << std::left << std::setw(arrivalTableWidths[0]);
 		std::cout << arrival.getFormattedTime() << " | ";
 		std::cout << std::left << std::setw(arrivalTableWidths[1]);
-		std::cout << arrival.getTrack() << " | ";
+		std::cout << arrival.getTrack() + 1 << " | ";
 		std::cout << std::left << std::setw(arrivalTableWidths[2]);
 		std::cout << arrivingTrains[i]->getId() << " | ";
 		std::cout << std::left << std::setw(arrivalTableWidths[3]);
@@ -126,12 +129,55 @@ void Station::printArrivals() const
 		std::cout << (currentTime >= arrival.getTime() ? "Arrived" : "To arrive") << " |";
 		std::cout << std::endl;
 	}
-	std::cout << line << std::endl;
+	if (count > 0)
+	{
+		std::cout << line << std::endl;
+	}
 }
 
 void Station::printDepartures() const
 {
+	std::cout << "Departure: " << std::endl;
 
+	// Print header
+	size_t tableWidth = getTableWidth(departureTableWidths, 6);
+	BasicString line = BasicString::repeat('-', tableWidth);
+	std::cout << line << std::endl;
+	std::cout << "| ";
+	for (size_t i = 0; i < 6; i++)
+	{
+		std::cout << std::left << std::setw(departureTableWidths[i]);
+		std::cout << departureHeaders[i] << " | ";
+	}
+	std::cout << std::endl;
+	std::cout << line << std::endl;
+
+	// Print data
+	size_t count = departureTrains.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		std::cout << "| ";
+		const TrainMoment& departure = departureTrains[i].getDeparture();
+		const TrainMoment& arrival = departureTrains[i].getArrival();
+		std::cout << std::left << std::setw(departureTableWidths[0]);
+		std::cout << departure.getFormattedTime() << " | ";
+		std::cout << std::left << std::setw(departureTableWidths[1]);
+		std::cout << arrival.getFormattedTime() << " | ";
+		std::cout << std::left << std::setw(departureTableWidths[2]);
+		std::cout << arrival.getStation()->getName() << " | ";
+		std::cout << std::left << std::setw(departureTableWidths[3]);
+		std::cout << departure.getTrack() + 1 << " | ";
+		std::cout << std::left << std::setw(departureTableWidths[4]);
+		std::cout << departureTrains[i].getId() << " | ";
+		std::cout << std::left << std::setw(departureTableWidths[5]);
+		time_t currentTime = time(0);
+		std::cout << (currentTime >= departure.getTime() ? "Departed" : "To depart") << " |";
+		std::cout << std::endl;
+	}
+	if (count > 0)
+	{
+		std::cout << line << std::endl;
+	}
 }
 
 size_t Station::getTableWidth(size_t columnWidths[], size_t count) const

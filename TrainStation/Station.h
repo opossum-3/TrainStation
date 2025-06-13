@@ -22,8 +22,10 @@ private:
 	BasicVector<Train> departureTrains;
 	BasicVector<Train*> arrivingTrains;
 
-	static const char* arrivalHeaders[]; 
+	static const char* arrivalHeaders[];
+	static const char* departureHeaders[];
 	static size_t arrivalTableWidths[];
+	static size_t departureTableWidths[];
 
 	void printArrivals() const;
 	void printDepartures() const;
