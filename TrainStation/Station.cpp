@@ -59,6 +59,27 @@ void Station::printScheduleDestination(const Station* destination) const
 	}
 }
 
+void Station::printScheduleTime(time_t time) const
+{
+	size_t tableWidth = getTableWidth(departureTableWidths, 6);
+	BasicString line = BasicString::repeat('-', tableWidth);
+	printDepartureHeader(line);
+	size_t count = departureTrains.getSize();
+	size_t filtered = 0;
+	for (size_t i = 0; i < count; i++)
+	{
+		if (departureTrains[i].getDeparture().getTime() >= time)
+		{
+			filtered++;
+			printDepartureRow(i);
+		}
+	}
+	if (filtered > 0)
+	{
+		std::cout << line << std::endl;
+	}
+}
+
 void Station::addTrain(unsigned trainId, Station* destination, 
 					   double distance, double speed, time_t departureTime)
 {

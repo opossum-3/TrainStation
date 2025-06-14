@@ -151,6 +151,17 @@ void TrainSystem::start()
                 printScheduleDestination(stationName, destinationName);
                 continue;
             }
+            if (command.startsWith("print-schedule-time"))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("print-schedule-time ", readIndex);
+                BasicString stationName = CommandReader::readName(command, readIndex);
+                readIndex++;
+                time_t time = CommandReader::readDateTime(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                printScheduleTime(stationName, time);
+                continue;
+            }
             if (command.startsWith("print-train"))
             {
                 int readIndex = 0;
@@ -350,6 +361,20 @@ void TrainSystem::printScheduleDestination(const BasicString& stationName, const
         throw std::exception("Start station and destination cannot be the same!");
     }
     station->printScheduleDestination(destination);
+}
+
+void TrainSystem::printScheduleTime(const BasicString& stationName, time_t time) const
+{
+    size_t stationCount = stations.getSize();
+    for (size_t i = 0; i < stationCount; i++)
+    {
+        if (stations[i].getName() == stationName)
+        {
+            stations[i].printScheduleTime(time);
+            return;
+        }
+    }
+    throw std::exception("Invalid train station!");
 }
 
 void TrainSystem::printTrain(unsigned id) const

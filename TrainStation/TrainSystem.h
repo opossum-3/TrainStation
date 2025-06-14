@@ -34,6 +34,7 @@ private:
 	void printStations() const;
 	void printSchedule(const BasicString& stationName) const;
 	void printScheduleDestination(const BasicString& stationName, const BasicString& destinationName) const;
+	void printScheduleTime(const BasicString& stationName, time_t time) const;
 	void printTrain(unsigned id) const;
 
 	unsigned getMaxTrainId() const;

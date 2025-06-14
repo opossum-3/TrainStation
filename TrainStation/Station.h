@@ -12,6 +12,7 @@ public:
 	const BasicString& getName() const;
 	void printSchedule() const;
 	void printScheduleDestination(const Station* destination) const;
+	void printScheduleTime(time_t time) const;
 	void addTrain(unsigned trainId, Station* destination,
 				  double distance, double speed, time_t departureTime);
 	bool tryRemoveTrain(unsigned trainId);
