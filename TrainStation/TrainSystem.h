@@ -18,7 +18,7 @@ private:
 	unsigned currentTrainId;
 
 	void loadAdmins();
-	void checkForCommandEnd(BasicString command, int& readIndex);
+	void checkForCommandEnd(const BasicString& command, int& readIndex);
 	void checkForAdmin();
 	void loginAdmin(BasicString& username, BasicString& password);
 	void addStation(BasicString& name);
@@ -26,9 +26,10 @@ private:
 				  double distance, double speed, time_t departureTime);
 	void removeTrain(unsigned id);
 	void printStations() const;
-	void printStation(const BasicString& name) const;
+	void printSchedule(const BasicString& name) const;
 	void printTrain(unsigned id) const;
 	unsigned getMaxTrainId() const;
 
 	Station* findStation(BasicString& name);
+	Train* findTrain(unsigned id);
 };

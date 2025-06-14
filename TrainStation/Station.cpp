@@ -106,6 +106,19 @@ const Train* Station::findTrain(unsigned trainId) const
 	return nullptr;
 }
 
+Train* Station::findTrain(unsigned trainId)
+{
+	size_t count = departureTrains.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (departureTrains[i].getId() == trainId)
+		{
+			return &(departureTrains[i]);
+		}
+	}
+	return nullptr;
+}
+
 void Station::printArrivals() const
 {
 	std::cout << "Arrivals: " << std::endl;

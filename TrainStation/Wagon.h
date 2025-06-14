@@ -1,6 +1,7 @@
 #pragma once
 #include "BasicVector.hpp"
 
+enum class WagonType { Null, FirstClass, SecondClass, SleepWagon };
 class Wagon
 {
 public:

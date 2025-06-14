@@ -62,6 +62,7 @@ double CommandReader::readDouble(const BasicString& str, int& readIndex)
 				throw std::exception("Invalid string format.");
 			}
 			denominator = 1;
+			readIndex++;
 		}
 		else
 		{

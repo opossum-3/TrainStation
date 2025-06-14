@@ -1,5 +1,8 @@
 #include "Train.h"
 #include "Station.h"
+#include "FirstClassWagon.h"
+#include "SecondClassWagon.h"
+#include "SleepWagon.h"
 
 Train::Train()
 {
@@ -8,7 +11,7 @@ Train::Train()
 
 Train::Train(unsigned id, const TrainMoment& departure, const TrainMoment& arrival, 
 			 double distance, double speed) 
-			 : trainId(id), departure(departure), arrival(arrival),
+			 : trainId(id), currentWagonId(1), departure(departure), arrival(arrival),
 			   distance(distance), speed(speed), wagons()
 {
 	
@@ -62,6 +65,27 @@ void Train::print() const
 	std::cout << std::endl << "Wagons: " << std::endl;
 }
 
+void Train::addFirstClassWagon(unsigned basePrice, double comfortFactor)
+{
+	FirstClassWagon* wagon = new FirstClassWagon(currentWagonId++, basePrice, comfortFactor);
+	wagons.push_back(wagon);
+	std::cout << "Added First Class Wagon with ID: " << currentWagonId - 1 << std::endl;
+}
+
+void Train::addSecondClassWagon(unsigned basePrice, unsigned pricePerKg)
+{
+	SecondClassWagon* wagon = new SecondClassWagon(currentWagonId++, basePrice, pricePerKg);
+	wagons.push_back(wagon);
+	std::cout << "Added Second Class Wagon with ID: " << currentWagonId - 1 << std::endl;
+}
+
+void Train::addSleepWagon(unsigned basePrice, unsigned pricePer100km)
+{
+	SleepWagon* wagon = new SleepWagon(currentWagonId++, basePrice, pricePer100km);
+	wagons.push_back(wagon);
+	std::cout << "Added Sleep Wagon with ID: " << currentWagonId - 1 << std::endl;
+}
+
 void Train::copy(const Train& other)
 {
 	trainId = other.trainId;
@@ -69,6 +93,7 @@ void Train::copy(const Train& other)
 	arrival = other.arrival;
 	distance = other.distance;
 	speed = other.speed;
+	currentWagonId = other.currentWagonId;
 	size_t count = other.wagons.getSize();
 	for (size_t i = 0; i < count; i++)
 	{

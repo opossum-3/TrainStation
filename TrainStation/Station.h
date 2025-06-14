@@ -17,6 +17,7 @@ public:
 	unsigned getMaxTrainId() const;
 	unsigned getFreeTrack(const TimeInterval& interval);
 	const Train* findTrain(unsigned trainId) const;
+	Train* findTrain(unsigned trainId);
 private:
 	BasicString name;
 	BasicVector<Track> tracks;

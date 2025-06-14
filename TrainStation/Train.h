@@ -17,6 +17,9 @@ public:
 	const TrainMoment& getDeparture() const;
 	const TrainMoment& getArrival() const;
 	void print() const;
+	void addFirstClassWagon(unsigned basePrice, double comfortFactor);
+	void addSecondClassWagon(unsigned basePrice, unsigned pricePerKg);
+	void addSleepWagon(unsigned basePrice, unsigned pricePer100km);
 private:
 	unsigned trainId;
 	TrainMoment departure;
@@ -24,6 +27,7 @@ private:
 	double distance;
 	double speed;
 	BasicVector<Wagon*> wagons;
+	unsigned currentWagonId;
 
 	void copy(const Train& other);
 	void free();

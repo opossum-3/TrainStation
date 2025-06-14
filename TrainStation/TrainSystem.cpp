@@ -1,5 +1,6 @@
 #include "TrainSystem.h"
 #include "CommandReader.h"
+#include "Wagon.h"
 #include <fstream>
 #include <iostream>
 #include <ctime>
@@ -27,7 +28,7 @@ void TrainSystem::loadAdmins()
     ifstr.close();
 }
 
-void TrainSystem::checkForCommandEnd(BasicString command, int& readIndex)
+void TrainSystem::checkForCommandEnd(const BasicString& command, int& readIndex)
 {
     if (!CommandReader::isCompleted(command, readIndex))
     {
@@ -130,13 +131,13 @@ void TrainSystem::start()
                 printStations();
                 continue;
             }
-            if (command.startsWith("print-station"))
+            if (command.startsWith("print-schedule"))
             {
                 int readIndex = 0;
-                CommandReader::moveIndexByLength("print-station ", readIndex);
+                CommandReader::moveIndexByLength("print-schedule ", readIndex);
                 BasicString name = CommandReader::readName(command, readIndex);
                 checkForCommandEnd(command, readIndex);
-                printStation(name);
+                printSchedule(name);
                 continue;
             }
             if (command.startsWith("print-train"))
@@ -210,6 +211,45 @@ void TrainSystem::start()
                 removeTrain(id);
                 continue;
             }
+            if (command.startsWith("add-wagon"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("add-wagon ", readIndex);
+                unsigned trainId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                BasicString wagonType = CommandReader::readWord(command, readIndex);
+                readIndex++;
+                unsigned basePrice = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                Train* train = findTrain(trainId);
+                if (!train)
+                {
+                    throw std::exception("Invalid train ID!");
+                }
+                if (wagonType.equals("first-class"))
+                {
+                    double comfortFactor = CommandReader::readDouble(command, readIndex);
+                    checkForCommandEnd(command, readIndex);
+                    train->addFirstClassWagon(basePrice, comfortFactor);
+                    continue;
+                }
+                if (wagonType.equals("second-class"))
+                {
+                    unsigned pricePerKg = CommandReader::readUnsigned(command, readIndex);
+                    checkForCommandEnd(command, readIndex);
+                    train->addSecondClassWagon(basePrice, pricePerKg);
+                    continue;
+                }
+                if (wagonType.equals("sleep-wagon"))
+                {
+                    unsigned pricePer100km = CommandReader::readUnsigned(command, readIndex);
+                    checkForCommandEnd(command, readIndex);
+                    train->addSleepWagon(basePrice, pricePer100km);
+                    continue;
+                }
+                throw std::exception("Invalid wagon type!");
+            }
             throw std::exception("Invalid command!");
         }
         catch(std::exception& e)
@@ -228,7 +268,7 @@ void TrainSystem::printStations() const
     }
 }
 
-void TrainSystem::printStation(const BasicString& name) const
+void TrainSystem::printSchedule(const BasicString& name) const
 {
     size_t stationCount = stations.getSize();
     for (size_t i = 0; i < stationCount; i++)
@@ -280,6 +320,20 @@ Station* TrainSystem::findStation(BasicString& name)
         if (stations[i].getName() == name)
         {
             return &stations[i];
+        }
+    }
+    return nullptr;
+}
+
+Train* TrainSystem::findTrain(unsigned id)
+{
+    size_t count = stations.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        Train* train = stations[i].findTrain(id);
+        if (train)
+        {
+            return train;
         }
     }
     return nullptr;

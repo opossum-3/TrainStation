@@ -1,13 +1,13 @@
 #include "FirstClassWagon.h"
 
-FirstClassWagon::FirstClassWagon() : Wagon(), foodIncluded(false), comfortFactor(0)
+FirstClassWagon::FirstClassWagon() : Wagon(), comfortFactor(0)
 {
 
 }
 
 
 FirstClassWagon::FirstClassWagon(unsigned wagonId, unsigned basePrice, 
-								 bool foodIncluded, double comfortFactor):
+								 double comfortFactor):
 								 Wagon(wagonId, basePrice),
 								 foodIncluded(foodIncluded), comfortFactor(comfortFactor)
 {									
