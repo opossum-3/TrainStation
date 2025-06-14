@@ -5,6 +5,11 @@ Wagon::Wagon() : wagonId(0), basePrice(0), seats()
 
 }
 
+Wagon::~Wagon()
+{
+
+}
+
 Wagon::Wagon(unsigned wagonId, unsigned basePrice) : wagonId(wagonId), 
 													 basePrice(basePrice)
 {

@@ -22,16 +22,19 @@ private:
 	void checkForCommandEnd(const BasicString& command, int& readIndex);
 	void checkForAdmin();
 	void loginAdmin(BasicString& username, BasicString& password);
+
 	void addStation(BasicString& name);
 	void addTrain(BasicString& station, BasicString& destination,
 				  double distance, double speed, time_t departureTime);
+	void addWagon(unsigned trainId, BasicString& wagonType, BasicString& command, int& readIndex, unsigned basePrice);
+	
 	void removeTrain(unsigned id);
 	void removeWagon(unsigned trainId, unsigned wagonId);
-	void addWagon(unsigned trainId, BasicString& wagonType, BasicString& command, int& readIndex, unsigned basePrice);
 
 	void printStations() const;
 	void printSchedule(const BasicString& name) const;
 	void printTrain(unsigned id) const;
+
 	unsigned getMaxTrainId() const;
 
 	Station* findStation(BasicString& name);

@@ -1,5 +1,6 @@
 #pragma once
 #include "Wagon.h"
+#include "BasicString.h"
 
 class FirstClassWagon : public Wagon
 {
@@ -9,6 +10,7 @@ public:
 	unsigned getPrice() const override;
 	size_t getSeatCount() const override;
 	void print() const override;
+	BasicString getType() const override;
 private:
 	bool foodIncluded;
 	double comfortFactor;

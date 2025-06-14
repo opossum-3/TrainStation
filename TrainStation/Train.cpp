@@ -62,7 +62,13 @@ void Train::print() const
 	std::cout << "Departure Time: " << departure.getFormattedTime() << std::endl;
 	std::cout << "Arrival Time: " << arrival.getFormattedTime() << std::endl;
 	std::cout << "Departure Platform: " << departure.getTrack() + 1 << std::endl;
+
 	std::cout << std::endl << "Wagons: " << std::endl;
+	size_t count = wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		std::cout << wagons[i]->getWagonId() << " - " << wagons[i]->getType() << std::endl;
+	}
 }
 
 void Train::addFirstClassWagon(unsigned basePrice, double comfortFactor)

@@ -34,6 +34,11 @@ void SecondClassWagon::print() const
 	std::cout << std::endl;
 }
 
+BasicString SecondClassWagon::getType() const
+{
+	return BasicString("Second Class");
+}
+
 size_t SecondClassWagon::getRowsCount() const
 {
 	return 5;

@@ -37,6 +37,11 @@ void FirstClassWagon::print() const
 	std::cout << std::endl;
 }
 
+BasicString FirstClassWagon::getType() const
+{
+	return BasicString("First Class");
+}
+
 size_t FirstClassWagon::getRowsCount() const
 {
 	return 5;

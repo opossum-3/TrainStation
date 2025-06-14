@@ -35,6 +35,11 @@ void SleepWagon::print() const
 	std::cout << std::endl;
 }
 
+BasicString SleepWagon::getType() const
+{
+	return BasicString("Sleep Wagon");
+}
+
 size_t SleepWagon::getRowsCount() const
 {
 	return 5;
