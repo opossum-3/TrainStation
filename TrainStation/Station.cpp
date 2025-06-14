@@ -27,9 +27,36 @@ const BasicString& Station::getName() const
 
 void Station::printSchedule() const
 {
+	std::cout << "Arrivals: " << std::endl;
 	printArrivals();
 	std::cout << std::endl;
+	std::cout << "Departure: " << std::endl;
 	printDepartures();
+}
+
+void Station::printScheduleDestination(const Station* destination) const
+{
+	if (!destination)
+	{
+		throw std::exception("Invalid destination!");
+	}
+	size_t tableWidth = getTableWidth(departureTableWidths, 6);
+	BasicString line = BasicString::repeat('-', tableWidth);
+	printDepartureHeader(line);
+	size_t count = departureTrains.getSize();
+	size_t filtered = 0;
+	for (size_t i = 0; i < count; i++)
+	{
+		if (departureTrains[i].getArrival().getStation() == destination)
+		{
+			filtered++;
+			printDepartureRow(i);
+		}
+	}
+	if (filtered > 0)
+	{
+		std::cout << line << std::endl;
+	}
 }
 
 void Station::addTrain(unsigned trainId, Station* destination, 
@@ -121,8 +148,6 @@ Train* Station::findTrain(unsigned trainId)
 
 void Station::printArrivals() const
 {
-	std::cout << "Arrivals: " << std::endl;
-
 	// Print header
 	size_t tableWidth = getTableWidth(arrivalTableWidths, 5);
 	BasicString line = BasicString::repeat('-', tableWidth);
@@ -164,11 +189,23 @@ void Station::printArrivals() const
 
 void Station::printDepartures() const
 {
-	std::cout << "Departure: " << std::endl;
-
-	// Print header
 	size_t tableWidth = getTableWidth(departureTableWidths, 6);
 	BasicString line = BasicString::repeat('-', tableWidth);
+	printDepartureHeader(line);
+
+	size_t count = departureTrains.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		printDepartureRow(i);
+	}
+	if (count > 0)
+	{
+		std::cout << line << std::endl;
+	}
+}
+
+void Station::printDepartureHeader(const BasicString& line) const
+{
 	std::cout << line << std::endl;
 	std::cout << "| ";
 	for (size_t i = 0; i < 6; i++)
@@ -178,33 +215,27 @@ void Station::printDepartures() const
 	}
 	std::cout << std::endl;
 	std::cout << line << std::endl;
+}
 
-	// Print data
-	size_t count = departureTrains.getSize();
-	for (size_t i = 0; i < count; i++)
-	{
-		std::cout << "| ";
-		const TrainMoment& departure = departureTrains[i].getDeparture();
-		const TrainMoment& arrival = departureTrains[i].getArrival();
-		std::cout << std::left << std::setw(departureTableWidths[0]);
-		std::cout << departure.getFormattedTime() << " | ";
-		std::cout << std::left << std::setw(departureTableWidths[1]);
-		std::cout << arrival.getFormattedTime() << " | ";
-		std::cout << std::left << std::setw(departureTableWidths[2]);
-		std::cout << arrival.getStation()->getName() << " | ";
-		std::cout << std::left << std::setw(departureTableWidths[3]);
-		std::cout << departure.getTrack() + 1 << " | ";
-		std::cout << std::left << std::setw(departureTableWidths[4]);
-		std::cout << departureTrains[i].getId() << " | ";
-		std::cout << std::left << std::setw(departureTableWidths[5]);
-		time_t currentTime = time(0);
-		std::cout << (currentTime >= departure.getTime() ? "Departed" : "To depart") << " |";
-		std::cout << std::endl;
-	}
-	if (count > 0)
-	{
-		std::cout << line << std::endl;
-	}
+void Station::printDepartureRow(size_t i) const
+{
+	std::cout << "| ";
+	const TrainMoment& departure = departureTrains[i].getDeparture();
+	const TrainMoment& arrival = departureTrains[i].getArrival();
+	std::cout << std::left << std::setw(departureTableWidths[0]);
+	std::cout << departure.getFormattedTime() << " | ";
+	std::cout << std::left << std::setw(departureTableWidths[1]);
+	std::cout << arrival.getFormattedTime() << " | ";
+	std::cout << std::left << std::setw(departureTableWidths[2]);
+	std::cout << arrival.getStation()->getName() << " | ";
+	std::cout << std::left << std::setw(departureTableWidths[3]);
+	std::cout << departure.getTrack() + 1 << " | ";
+	std::cout << std::left << std::setw(departureTableWidths[4]);
+	std::cout << departureTrains[i].getId() << " | ";
+	std::cout << std::left << std::setw(departureTableWidths[5]);
+	time_t currentTime = time(0);
+	std::cout << (currentTime >= departure.getTime() ? "Departed" : "To depart") << " |";
+	std::cout << std::endl;
 }
 
 size_t Station::getTableWidth(size_t columnWidths[], size_t count) const

@@ -131,13 +131,24 @@ void TrainSystem::start()
                 printStations();
                 continue;
             }
-            if (command.startsWith("print-schedule"))
+            if (command.startsWith("print-schedule "))
             {
                 int readIndex = 0;
                 CommandReader::moveIndexByLength("print-schedule ", readIndex);
                 BasicString name = CommandReader::readName(command, readIndex);
                 checkForCommandEnd(command, readIndex);
                 printSchedule(name);
+                continue;
+            }
+            if (command.startsWith("print-schedule-destination"))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("print-schedule-destination ", readIndex);
+                BasicString stationName = CommandReader::readName(command, readIndex);
+                readIndex++;
+                BasicString destinationName = CommandReader::readName(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                printScheduleDestination(stationName, destinationName);
                 continue;
             }
             if (command.startsWith("print-train"))
@@ -308,6 +319,37 @@ void TrainSystem::printSchedule(const BasicString& name) const
         }
     }
     throw std::exception("Invalid train station!");
+}
+
+void TrainSystem::printScheduleDestination(const BasicString& stationName, const BasicString& destinationName) const
+{
+    const Station* station = nullptr;
+    const Station* destination = nullptr;
+    size_t stationCount = stations.getSize();
+    for (size_t i = 0; i < stationCount; i++)
+    {
+        if (stations[i].getName() == stationName)
+        {
+            station = &stations[i];
+        }
+        if (stations[i].getName() == destinationName)
+        {
+            destination = &stations[i];
+        }
+    }
+    if (!station)
+    {
+        throw std::exception("Invalid train station!");
+    }
+    if (!destination)
+    {
+        throw std::exception("Invalid destination!");
+    }
+    if (station == destination)
+    {
+        throw std::exception("Start station and destination cannot be the same!");
+    }
+    station->printScheduleDestination(destination);
 }
 
 void TrainSystem::printTrain(unsigned id) const

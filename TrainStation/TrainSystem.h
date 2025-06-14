@@ -32,7 +32,8 @@ private:
 	void removeWagon(unsigned trainId, unsigned wagonId);
 
 	void printStations() const;
-	void printSchedule(const BasicString& name) const;
+	void printSchedule(const BasicString& stationName) const;
+	void printScheduleDestination(const BasicString& stationName, const BasicString& destinationName) const;
 	void printTrain(unsigned id) const;
 
 	unsigned getMaxTrainId() const;

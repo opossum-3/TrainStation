@@ -11,6 +11,7 @@ public:
 	Station(BasicString name);
 	const BasicString& getName() const;
 	void printSchedule() const;
+	void printScheduleDestination(const Station* destination) const;
 	void addTrain(unsigned trainId, Station* destination,
 				  double distance, double speed, time_t departureTime);
 	bool tryRemoveTrain(unsigned trainId);
@@ -31,5 +32,7 @@ private:
 
 	void printArrivals() const;
 	void printDepartures() const;
+	void printDepartureHeader(const BasicString& line) const;
+	void printDepartureRow(size_t i) const;
 	size_t getTableWidth(size_t columnWidths[], size_t count) const;
 };
