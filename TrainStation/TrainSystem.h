@@ -9,6 +9,7 @@ public:
 	static TrainSystem* instance();
 	TrainSystem(const TrainSystem& other) = delete;
 	void start();
+	
 private:
 	static TrainSystem* system;
 	TrainSystem();
@@ -25,6 +26,9 @@ private:
 	void addTrain(BasicString& station, BasicString& destination,
 				  double distance, double speed, time_t departureTime);
 	void removeTrain(unsigned id);
+	void removeWagon(unsigned trainId, unsigned wagonId);
+	void addWagon(unsigned trainId, BasicString& wagonType, BasicString& command, int& readIndex, unsigned basePrice);
+
 	void printStations() const;
 	void printSchedule(const BasicString& name) const;
 	void printTrain(unsigned id) const;

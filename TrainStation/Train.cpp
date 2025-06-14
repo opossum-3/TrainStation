@@ -86,6 +86,34 @@ void Train::addSleepWagon(unsigned basePrice, unsigned pricePer100km)
 	std::cout << "Added Sleep Wagon with ID: " << currentWagonId - 1 << std::endl;
 }
 
+void Train::removeWagon(unsigned wagonId)
+{
+	size_t count = wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (wagons[i]->getWagonId() == wagonId)
+		{
+			wagons.removeAt(i);
+			std::cout << "Wagon removed successfully." << std::endl;
+			return;
+		}
+	}
+	throw std::exception("Invalid wagon ID!");
+}
+
+Wagon* Train::findWagon(unsigned wagonId)
+{
+	size_t count = wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (wagons[i]->getWagonId() == wagonId)
+		{
+			return wagons[i];
+		}
+	}
+	return nullptr;
+}
+
 void Train::copy(const Train& other)
 {
 	trainId = other.trainId;

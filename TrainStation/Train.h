@@ -20,6 +20,8 @@ public:
 	void addFirstClassWagon(unsigned basePrice, double comfortFactor);
 	void addSecondClassWagon(unsigned basePrice, unsigned pricePerKg);
 	void addSleepWagon(unsigned basePrice, unsigned pricePer100km);
+	void removeWagon(unsigned wagonId);
+	Wagon* findWagon(unsigned wagonId);
 private:
 	unsigned trainId;
 	TrainMoment departure;
