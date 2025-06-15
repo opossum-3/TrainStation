@@ -346,6 +346,24 @@ void TrainSystem::start()
                 }
                 continue;
             }
+            if (command.startsWith("validate-discount-card"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("validate-discount-card ", readIndex);
+                unsigned cardId = CommandReader::readUnsigned(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                bool isValid = CardManager::instance()->isValidCard(cardId);
+                if (isValid)
+                {
+                    std::cout << "The card is valid." << std::endl;
+                }
+                else
+                {
+                    std::cout << "The card is invalid." << std::endl;
+                }
+                continue;
+            }
             throw std::exception("Invalid command!");
         }
         catch(std::exception& e)
