@@ -1,6 +1,7 @@
 #include "TrainSystem.h"
 #include "CommandReader.h"
 #include "Wagon.h"
+#include "PassengerInfo.h"
 #include <fstream>
 #include <iostream>
 #include <ctime>
@@ -171,6 +172,31 @@ void TrainSystem::start()
                 printTrain(id);
                 continue;
             }
+            if (command.startsWith("print-wagon"))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("print-wagon ", readIndex);
+                unsigned trainId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned wagonId = CommandReader::readUnsigned(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                printWagon(trainId, wagonId);
+                continue;
+            }
+            if (command.startsWith("buy-ticket "))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("buy-ticket ", readIndex);
+                unsigned trainId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned wagonId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned seatId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                BasicString ticketFile = CommandReader::readWord(command, readIndex);
+                buyTicket(command, readIndex, trainId, wagonId, seatId, ticketFile);
+                continue;
+            }
             if (command.startsWith("login"))
             {
                 if (loggedAdmin)
@@ -266,6 +292,54 @@ void TrainSystem::start()
             std::cout << e.what() << std::endl;
         }
     }
+}
+
+void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int trainId, unsigned int wagonId, unsigned int seatId, BasicString& ticketFile)
+{
+    Train* train = findTrain(trainId);
+    if (!train)
+    {
+        throw std::exception("Invalid train ID!");
+    }
+    Wagon* wagon = train->findWagon(wagonId);
+    if (!wagon)
+    {
+        throw std::exception("Invalid wagon ID!");
+    }
+    double price = 0;
+    BasicString wagonType = wagon->getType();
+    if (wagonType.equals("First Class"))
+    {
+        readIndex++;
+        bool foodIncluded = CommandReader::readBool(command, readIndex);
+        checkForCommandEnd(command, readIndex);
+        wagon->reserveSeat(seatId);
+        PassengerInfo info(foodIncluded, 0, 0);
+        price = wagon->getPrice(info);
+    }
+    else if (wagonType.equals("Second Class"))
+    {
+        readIndex++;
+        unsigned baggageKg = CommandReader::readUnsigned(command, readIndex);
+        checkForCommandEnd(command, readIndex);
+        wagon->reserveSeat(seatId);
+        PassengerInfo info(false, baggageKg, 0);
+        price = wagon->getPrice(info);
+    }
+    else if (wagonType.equals("Sleep Wagon"))
+    {
+        checkForCommandEnd(command, readIndex);
+        wagon->reserveSeat(seatId);
+        PassengerInfo info(false, 0, train->getDistance());
+        price = wagon->getPrice(info);
+    }
+    else
+    {
+        throw std::exception("Invalid wagon type!");
+    }
+    std::cout << "Ticket successfully bought for Train ID: " << trainId << std::endl;
+    std::cout << "Ticket price: " << price << " lv." << std::endl;
+    std::cout << "Ticket saved to file: " << ticketFile << std::endl;
 }
 
 void TrainSystem::removeWagon(unsigned trainId, unsigned wagonId)
@@ -392,6 +466,21 @@ void TrainSystem::printTrain(unsigned id) const
     throw std::exception("Invalid train ID!");
 }
 
+void TrainSystem::printWagon(unsigned trainId, unsigned wagonId) const
+{
+    const Train* train = findTrain(trainId);
+    if (!train)
+    {
+        throw std::exception("Invalid train ID!");
+    }
+    const Wagon* wagon = train->findWagon(wagonId);
+    if (!wagon)
+    {
+        throw std::exception("Invalid wagon ID!");
+    }
+    wagon->print();
+}
+
 unsigned TrainSystem::getMaxTrainId() const
 {
     unsigned max = 0;
@@ -426,6 +515,20 @@ Train* TrainSystem::findTrain(unsigned id)
     for (size_t i = 0; i < count; i++)
     {
         Train* train = stations[i].findTrain(id);
+        if (train)
+        {
+            return train;
+        }
+    }
+    return nullptr;
+}
+
+const Train* TrainSystem::findTrain(unsigned id) const
+{
+    size_t count = stations.getSize();
+    for (size_t i = 0; i < count; i++)
+    {
+        const Train* train = stations[i].findTrain(id);
         if (train)
         {
             return train;

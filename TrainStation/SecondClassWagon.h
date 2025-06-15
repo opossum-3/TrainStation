@@ -6,7 +6,7 @@ class SecondClassWagon : public Wagon
 public:
 	SecondClassWagon();
 	SecondClassWagon(unsigned wagonId, unsigned basePrice, unsigned pricePerKg);
-	unsigned getPrice() const override;
+	double getPrice(const PassengerInfo& info) const override;
 	size_t getSeatCount() const override;
 	void print() const override;
 	BasicString getType() const override;

@@ -12,6 +12,7 @@ public:
 	static double readDouble(const BasicString& str, int& readIndex);
 	static BasicString readName(const BasicString& str, int& readIndex);
 	static BasicString readPassword(const BasicString& str, int& readIndex);
+	static bool readBool(const BasicString& str, int& readIndex);
 	static BasicString readWord(const BasicString& str, int& readIndex);
 	static BasicString readToEnd(const BasicString& str, int& readIndex);
 	static time_t readDateTime(const BasicString& str, int& readIndex);

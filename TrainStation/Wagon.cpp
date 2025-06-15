@@ -10,6 +10,28 @@ Wagon::~Wagon()
 
 }
 
+bool Wagon::isValidSeat(size_t seatId) const
+{
+	if (seatId == 0)
+	{
+		return false;
+	}
+	return seatId - 1 < seats.getSize();
+}
+
+void Wagon::reserveSeat(size_t seatId)
+{
+	if (!isValidSeat(seatId))
+	{
+		throw std::exception("Invalid seat ID!");
+	}
+	if (seats[seatId - 1])
+	{
+		throw std::exception("Seat already reserved!");
+	}
+	seats[seatId - 1] = true;
+}
+
 Wagon::Wagon(unsigned wagonId, unsigned basePrice) : wagonId(wagonId), 
 													 basePrice(basePrice)
 {

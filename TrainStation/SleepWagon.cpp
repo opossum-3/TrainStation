@@ -13,9 +13,9 @@ SleepWagon::SleepWagon(unsigned wagonId, unsigned basePrice,
 	clearSeats();
 }
 
-unsigned SleepWagon::getPrice() const
+double SleepWagon::getPrice(const PassengerInfo& info) const
 {
-	return basePrice;
+	return basePrice + info.getDistance() / 100 * pricePer100km;
 }
 
 size_t SleepWagon::getSeatCount() const

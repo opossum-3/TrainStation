@@ -1,6 +1,7 @@
 #pragma once
 #include "BasicVector.hpp"
 #include "BasicString.h";
+#include "PassengerInfo.h"
 
 enum class WagonType { Null, FirstClass, SecondClass, SleepWagon };
 class Wagon
@@ -10,10 +11,12 @@ public:
 	Wagon(unsigned wagonId, unsigned basePrice);
 	unsigned getWagonId() const;
 	virtual size_t getSeatCount() const = 0;
-	virtual unsigned getPrice() const = 0;
+	virtual double getPrice(const PassengerInfo& info) const = 0;
 	virtual void print() const = 0;
 	virtual BasicString getType() const = 0;
 	virtual ~Wagon();
+	bool isValidSeat(size_t seat) const;
+	void reserveSeat(size_t seat);
 protected:
 	unsigned wagonId;
 	unsigned basePrice;

@@ -16,12 +16,15 @@ public:
 	unsigned getId() const;
 	const TrainMoment& getDeparture() const;
 	const TrainMoment& getArrival() const;
+	double getDistance() const;
 	void print() const;
+	void printWagon(unsigned wagonId) const;
 	void addFirstClassWagon(unsigned basePrice, double comfortFactor);
 	void addSecondClassWagon(unsigned basePrice, unsigned pricePerKg);
 	void addSleepWagon(unsigned basePrice, unsigned pricePer100km);
 	void removeWagon(unsigned wagonId);
 	Wagon* findWagon(unsigned wagonId);
+	const Wagon* findWagon(unsigned wagonId) const;
 private:
 	unsigned trainId;
 	TrainMoment departure;

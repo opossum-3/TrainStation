@@ -12,9 +12,9 @@ SecondClassWagon::SecondClassWagon(unsigned wagonId, unsigned basePrice, unsigne
 	clearSeats();
 }
 
-unsigned SecondClassWagon::getPrice() const
+double SecondClassWagon::getPrice(const PassengerInfo& info) const
 {
-	return basePrice;
+	return basePrice + info.getBaggageKg() * pricePerKg;
 }
 
 size_t SecondClassWagon::getSeatCount() const

@@ -15,9 +15,9 @@ FirstClassWagon::FirstClassWagon(unsigned wagonId, unsigned basePrice,
 	clearSeats();
 }
 
-unsigned FirstClassWagon::getPrice() const
+double FirstClassWagon::getPrice(const PassengerInfo& info) const
 {
-	return basePrice;
+	return basePrice * comfortFactor + (info.getFoodIncluded() ? 10 : 0);
 }
 
 size_t FirstClassWagon::getSeatCount() const

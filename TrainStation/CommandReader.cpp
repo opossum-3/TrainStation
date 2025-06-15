@@ -132,6 +132,25 @@ BasicString CommandReader::readPassword(const BasicString& str, int& readIndex)
 	return BasicString(result);
 }
 
+bool CommandReader::readBool(const BasicString& str, int& readIndex)
+{
+	size_t length = str.getLength();
+	if (readIndex < 0 || readIndex >= length)
+	{
+		throw std::exception("Invalid index!");
+	}
+	BasicString word = CommandReader::readWord(str, readIndex);
+	if (word.equals("true"))
+	{
+		return true;
+	}
+	if (word.equals("false"))
+	{
+		return false;
+	}
+	throw std::exception("Invalid string!");
+}
+
 BasicString CommandReader::readWord(const BasicString& str, int& readIndex)
 {
 	size_t length = str.getLength();

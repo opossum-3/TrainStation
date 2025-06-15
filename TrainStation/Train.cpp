@@ -52,6 +52,11 @@ const TrainMoment& Train::getArrival() const
 	return arrival;
 }
 
+double Train::getDistance() const
+{
+	return distance;
+}
+
 void Train::print() const
 {
 	std::cout << "===Train ID: " << trainId << "===" << std::endl;
@@ -68,6 +73,18 @@ void Train::print() const
 	for (size_t i = 0; i < count; i++)
 	{
 		std::cout << wagons[i]->getWagonId() << " - " << wagons[i]->getType() << std::endl;
+	}
+}
+
+void Train::printWagon(unsigned wagonId) const
+{
+	size_t count = wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (wagons[i]->getWagonId() == wagonId)
+		{
+			wagons[i]->print();
+		}
 	}
 }
 
@@ -108,6 +125,19 @@ void Train::removeWagon(unsigned wagonId)
 }
 
 Wagon* Train::findWagon(unsigned wagonId)
+{
+	size_t count = wagons.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (wagons[i]->getWagonId() == wagonId)
+		{
+			return wagons[i];
+		}
+	}
+	return nullptr;
+}
+
+const Wagon* Train::findWagon(unsigned wagonId) const
 {
 	size_t count = wagons.getSize();
 	for (size_t i = 0; i < count; i++)

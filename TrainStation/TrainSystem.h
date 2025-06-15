@@ -9,6 +9,8 @@ public:
 	static TrainSystem* instance();
 	TrainSystem(const TrainSystem& other) = delete;
 	void start();
+
+	void buyTicket(BasicString& command, int& readIndex, unsigned int trainId, unsigned int wagonId, unsigned int seatId, BasicString& ticketFile);
 	
 private:
 	static TrainSystem* system;
@@ -36,9 +38,11 @@ private:
 	void printScheduleDestination(const BasicString& stationName, const BasicString& destinationName) const;
 	void printScheduleTime(const BasicString& stationName, time_t time) const;
 	void printTrain(unsigned id) const;
+	void printWagon(unsigned trainId, unsigned wagonId) const;
 
 	unsigned getMaxTrainId() const;
 
 	Station* findStation(BasicString& name);
 	Train* findTrain(unsigned id);
+	const Train* findTrain(unsigned id) const;
 };
