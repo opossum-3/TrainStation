@@ -10,6 +10,8 @@ public:
 	size_t getSeatCount() const override;
 	void print() const override;
 	BasicString getType() const override;
+	void serialize(std::ofstream& ofstr) const override;
+	void deserialize(std::ifstream& ifstr) override;
 private:
 	unsigned pricePer100km;
 	size_t getRowsCount() const override;

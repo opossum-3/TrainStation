@@ -39,6 +39,24 @@ BasicString SecondClassWagon::getType() const
 	return BasicString("Second Class");
 }
 
+void SecondClassWagon::serialize(std::ofstream& ofstr) const
+{
+	if (!ofstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	BasicString type = getType();
+	type.serialize(ofstr);
+	Wagon::serialize(ofstr);
+	ofstr.write(reinterpret_cast<const char*>(&pricePerKg), sizeof(pricePerKg));
+}
+
+void SecondClassWagon::deserialize(std::ifstream& ifstr)
+{
+	Wagon::deserialize(ifstr);
+	ifstr.read(reinterpret_cast<char*>(&pricePerKg), sizeof(pricePerKg));
+}
+
 size_t SecondClassWagon::getRowsCount() const
 {
 	return 5;

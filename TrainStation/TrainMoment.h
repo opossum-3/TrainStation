@@ -12,6 +12,8 @@ public:
 	unsigned getTrack() const;
 	time_t getTime() const;
 	BasicString getFormattedTime() const;
+	void serialize(std::ofstream& ofstr) const;
+	void deserialize(std::ifstream& ifstr);
 private:
 	Station* station;
 	unsigned track;

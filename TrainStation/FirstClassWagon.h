@@ -11,6 +11,8 @@ public:
 	size_t getSeatCount() const override;
 	void print() const override;
 	BasicString getType() const override;
+	void serialize(std::ofstream& ofstr) const override;
+	void deserialize(std::ifstream& ifstr) override;
 private:
 	bool foodIncluded;
 	double comfortFactor;

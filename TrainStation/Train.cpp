@@ -150,6 +150,26 @@ const Wagon* Train::findWagon(unsigned wagonId) const
 	return nullptr;
 }
 
+void Train::serialize(std::ofstream& ofstr) const
+{
+	if (!ofstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	ofstr.write(reinterpret_cast<const char*>(&trainId), sizeof(trainId));
+
+}
+
+void Train::deserialize(std::ifstream& ifstr)
+{
+	if (!ifstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	ifstr.read(reinterpret_cast<char*>(&trainId), sizeof(trainId));
+
+}
+
 void Train::copy(const Train& other)
 {
 	trainId = other.trainId;

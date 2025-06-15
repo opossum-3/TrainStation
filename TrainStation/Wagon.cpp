@@ -32,6 +32,40 @@ void Wagon::reserveSeat(size_t seatId)
 	seats[seatId - 1] = true;
 }
 
+void Wagon::serialize(std::ofstream& ofstr) const
+{
+	if (!ofstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	ofstr.write(reinterpret_cast<const char*>(&wagonId), sizeof(wagonId));
+	ofstr.write(reinterpret_cast<const char*>(&basePrice), sizeof(basePrice));
+	size_t count = seats.getSize();
+	ofstr.write(reinterpret_cast<const char*>(&count), sizeof(count));
+	for (size_t i = 0; i < count; i++)
+	{
+		ofstr.write(reinterpret_cast<const char*>(&seats[i]), sizeof(seats[i]));
+	}
+}
+
+void Wagon::deserialize(std::ifstream& ifstr)
+{
+	if (!ifstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	ifstr.read(reinterpret_cast<char*>(&wagonId), sizeof(wagonId));
+	ifstr.read(reinterpret_cast<char*>(&basePrice), sizeof(basePrice));
+	size_t count = 0;
+	ifstr.read(reinterpret_cast<char*>(&count), sizeof(count));
+	for (size_t i = 0; i < count; i++)
+	{
+		bool seat = false;
+		ifstr.read(reinterpret_cast<char*>(&seat), sizeof(seat));
+		seats.push_back(seat);
+	}
+}
+
 Wagon::Wagon(unsigned wagonId, unsigned basePrice) : wagonId(wagonId), 
 													 basePrice(basePrice)
 {

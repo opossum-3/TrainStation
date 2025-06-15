@@ -17,6 +17,8 @@ public:
 	virtual ~Wagon();
 	bool isValidSeat(size_t seat) const;
 	void reserveSeat(size_t seat);
+	virtual void serialize(std::ofstream& ofstr) const;
+	virtual void deserialize(std::ifstream& ifstr);
 protected:
 	unsigned wagonId;
 	unsigned basePrice;

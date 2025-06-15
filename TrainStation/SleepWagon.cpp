@@ -40,6 +40,24 @@ BasicString SleepWagon::getType() const
 	return BasicString("Sleep Wagon");
 }
 
+void SleepWagon::serialize(std::ofstream& ofstr) const
+{
+	if (!ofstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	BasicString type = getType();
+	type.serialize(ofstr);
+	Wagon::serialize(ofstr);
+	ofstr.write(reinterpret_cast<const char*>(&pricePer100km), sizeof(pricePer100km));
+}
+
+void SleepWagon::deserialize(std::ifstream& ifstr)
+{
+	Wagon::deserialize(ifstr);
+	ifstr.read(reinterpret_cast<char*>(&pricePer100km), sizeof(pricePer100km));
+}
+
 size_t SleepWagon::getRowsCount() const
 {
 	return 5;

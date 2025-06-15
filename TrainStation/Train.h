@@ -25,6 +25,8 @@ public:
 	void removeWagon(unsigned wagonId);
 	Wagon* findWagon(unsigned wagonId);
 	const Wagon* findWagon(unsigned wagonId) const;
+	void serialize(std::ofstream& ofstr) const;
+	void deserialize(std::ifstream& ifstr);
 private:
 	unsigned trainId;
 	TrainMoment departure;

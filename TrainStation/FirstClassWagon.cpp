@@ -42,6 +42,26 @@ BasicString FirstClassWagon::getType() const
 	return BasicString("First Class");
 }
 
+void FirstClassWagon::serialize(std::ofstream& ofstr) const
+{
+	if (!ofstr.is_open())
+	{
+		throw std::exception("File error!");
+	}
+	BasicString type = getType();
+	type.serialize(ofstr);
+	Wagon::serialize(ofstr);
+	ofstr.write(reinterpret_cast<const char*>(&foodIncluded), sizeof(foodIncluded));
+	ofstr.write(reinterpret_cast<const char*>(&comfortFactor), sizeof(comfortFactor));
+}
+
+void FirstClassWagon::deserialize(std::ifstream& ifstr)
+{
+	Wagon::deserialize(ifstr);
+	ifstr.read(reinterpret_cast<char*>(&foodIncluded), sizeof(foodIncluded));
+	ifstr.read(reinterpret_cast<char*>(&comfortFactor), sizeof(comfortFactor));
+}
+
 size_t FirstClassWagon::getRowsCount() const
 {
 	return 5;
