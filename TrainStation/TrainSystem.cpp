@@ -2,6 +2,7 @@
 #include "CommandReader.h"
 #include "Wagon.h"
 #include "PassengerInfo.h"
+#include "Ticket.h"
 #include <fstream>
 #include <iostream>
 #include <ctime>
@@ -337,6 +338,8 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
     {
         throw std::exception("Invalid wagon type!");
     }
+    Ticket ticket(train, wagon, seatId, 0, price);
+    ticket.writeToFile(ticketFile);
     std::cout << "Ticket successfully bought for Train ID: " << trainId << std::endl;
     std::cout << "Ticket price: " << price << " lv." << std::endl;
     std::cout << "Ticket saved to file: " << ticketFile << std::endl;

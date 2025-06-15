@@ -1,7 +1,6 @@
 #include "TrainMoment.h"
 #include "BasicString.h"
-
-const int TIME_FORMAT_BUFFER_SIZE = 30;
+#include "TimeInterval.h"
 
 TrainMoment::TrainMoment() : station(nullptr), track(0), time(0)
 {
@@ -32,9 +31,5 @@ time_t TrainMoment::getTime() const
 
 BasicString TrainMoment::getFormattedTime() const
 {
-    tm timeData;
-    localtime_s(&timeData, &time);
-    char buffer[TIME_FORMAT_BUFFER_SIZE] = { 0 };
-    strftime(buffer, TIME_FORMAT_BUFFER_SIZE, "%d/%m/%Y %H:%M", &timeData);
-    return BasicString(buffer);
+    return TimeInterval::getFormattedTime(time);
 }

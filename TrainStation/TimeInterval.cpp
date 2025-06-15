@@ -1,5 +1,7 @@
 #include "TimeInterval.h"
 
+const int TIME_FORMAT_BUFFER_SIZE = 30;
+
 TimeInterval::TimeInterval() : start(0), end(0)
 {
 
@@ -31,4 +33,13 @@ bool TimeInterval::intersectsWith(const TimeInterval& other) const
 		return true;
 	}
 	return false;
+}
+
+BasicString TimeInterval::getFormattedTime(time_t time)
+{
+	tm timeData;
+	localtime_s(&timeData, &time);
+	char buffer[TIME_FORMAT_BUFFER_SIZE] = { 0 };
+	strftime(buffer, TIME_FORMAT_BUFFER_SIZE, "%d/%m/%Y %H:%M", &timeData);
+	return BasicString(buffer);
 }
