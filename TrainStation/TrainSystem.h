@@ -10,6 +10,8 @@ public:
 	TrainSystem(const TrainSystem& other) = delete;
 	void start();
 
+	void moveWagon(unsigned int sourceTrainId, unsigned int destinationTrainId, unsigned int wagonId);
+
 	void buyTicket(BasicString& command, int& readIndex, unsigned int trainId, 
 		unsigned int wagonId, unsigned int seatId, BasicString& ticketFile);
 	void buyTicketDiscount(BasicString& command, int& readIndex, 

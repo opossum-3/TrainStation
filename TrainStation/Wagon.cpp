@@ -66,6 +66,19 @@ void Wagon::deserialize(std::ifstream& ifstr)
 	}
 }
 
+bool Wagon::isEmpty() const
+{
+	size_t count = seats.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (seats[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 Wagon::Wagon(unsigned wagonId, unsigned basePrice) : wagonId(wagonId), 
 													 basePrice(basePrice)
 {

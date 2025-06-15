@@ -19,6 +19,7 @@ public:
 	void reserveSeat(size_t seat);
 	virtual void serialize(std::ofstream& ofstr) const;
 	virtual void deserialize(std::ifstream& ifstr);
+	bool isEmpty() const;
 protected:
 	unsigned wagonId;
 	unsigned basePrice;

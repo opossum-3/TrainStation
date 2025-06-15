@@ -304,6 +304,21 @@ void TrainSystem::start()
                 removeWagon(trainId, wagonId);
                 continue;
             }
+            if (command.startsWith("move-wagon"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("move-wagon ", readIndex);
+                unsigned sourceTrainId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned wagonId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned destinationTrainId = CommandReader::readUnsigned(command, readIndex);
+                checkForCommandEnd(command, readIndex);
+                moveWagon(sourceTrainId, destinationTrainId, wagonId);
+
+                continue;
+            }
             if (command.startsWith("create-discount-card"))
             {
                 checkForAdmin();
@@ -370,6 +385,31 @@ void TrainSystem::start()
         {
             std::cout << e.what() << std::endl;
         }
+    }
+}
+
+void TrainSystem::moveWagon(unsigned int sourceTrainId, unsigned int destinationTrainId, unsigned int wagonId)
+{
+    Train* source = findTrain(sourceTrainId);
+    Train* destination = findTrain(destinationTrainId);
+    if (source == nullptr || destination == nullptr)
+    {
+        throw std::exception("Invalid train ID!");
+    }
+    Wagon* wagon = source->findWagon(wagonId);
+    if (wagon == nullptr)
+    {
+        throw std::exception("Invalid wagon ID!");
+    }
+    if (wagon->isEmpty() == false)
+    {
+        throw std::exception("Moved wagon should be empty!");
+    }
+    time_t current = time(0);
+    if (source->getDeparture().getTime() <= current
+        || destination->getDeparture().getTime() <= current)
+    {
+        throw std::exception("Trains already departed!");
     }
 }
 
