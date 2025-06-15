@@ -10,7 +10,12 @@ public:
 	TrainSystem(const TrainSystem& other) = delete;
 	void start();
 
-	void buyTicket(BasicString& command, int& readIndex, unsigned int trainId, unsigned int wagonId, unsigned int seatId, BasicString& ticketFile);
+	void buyTicket(BasicString& command, int& readIndex, unsigned int trainId, 
+		unsigned int wagonId, unsigned int seatId, BasicString& ticketFile);
+	void buyTicketDiscount(BasicString& command, int& readIndex, 
+		unsigned int trainId, unsigned int wagonId, 
+		unsigned int seatId, BasicString& ticketFile,
+		BasicString& cardFile);
 	
 private:
 	static TrainSystem* system;

@@ -199,6 +199,22 @@ void TrainSystem::start()
                 buyTicket(command, readIndex, trainId, wagonId, seatId, ticketFile);
                 continue;
             }
+            if (command.startsWith("buy-ticket-discount"))
+            {
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("buy-ticket-discount ", readIndex);
+                unsigned trainId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned wagonId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                unsigned seatId = CommandReader::readUnsigned(command, readIndex);
+                readIndex++;
+                BasicString ticketFile = CommandReader::readWord(command, readIndex);
+                readIndex++;
+                BasicString cardFile = CommandReader::readWord(command, readIndex);
+                buyTicketDiscount(command, readIndex, trainId, wagonId, seatId, ticketFile, cardFile);
+                continue;
+            }
             if (command.startsWith("login"))
             {
                 if (loggedAdmin)
@@ -338,7 +354,8 @@ void TrainSystem::start()
     }
 }
 
-void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int trainId, unsigned int wagonId, unsigned int seatId, BasicString& ticketFile)
+void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int trainId, 
+                            unsigned int wagonId, unsigned int seatId, BasicString& ticketFile)
 {
     Train* train = findTrain(trainId);
     if (!train)
@@ -386,6 +403,61 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
     ticket.writeToFile(ticketFile);
     std::cout << "Ticket successfully bought for Train ID: " << trainId << std::endl;
     std::cout << "Ticket price: " << price << " lv." << std::endl;
+    std::cout << "Ticket saved to file: " << ticketFile << std::endl;
+}
+
+void TrainSystem::buyTicketDiscount(BasicString& command, int& readIndex, unsigned int trainId, 
+                                    unsigned int wagonId, unsigned int seatId, 
+                                    BasicString& ticketFile, BasicString& cardFile)
+{
+    Train* train = findTrain(trainId);
+    if (!train)
+    {
+        throw std::exception("Invalid train ID!");
+    }
+    Wagon* wagon = train->findWagon(wagonId);
+    if (!wagon)
+    {
+        throw std::exception("Invalid wagon ID!");
+    }
+    double price = 0;
+    BasicString wagonType = wagon->getType();
+    BasicString destination = train->getArrival().getStation()->getName();
+    PassengerInfo info;
+    if (wagonType.equals("First Class"))
+    {
+        readIndex++;
+        bool foodIncluded = CommandReader::readBool(command, readIndex);
+        checkForCommandEnd(command, readIndex);
+        wagon->reserveSeat(seatId);
+        info = PassengerInfo(destination, foodIncluded, 0, 0);
+        price = wagon->getPrice(info);
+    }
+    else if (wagonType.equals("Second Class"))
+    {
+        readIndex++;
+        unsigned baggageKg = CommandReader::readUnsigned(command, readIndex);
+        checkForCommandEnd(command, readIndex);
+        wagon->reserveSeat(seatId);
+        info = PassengerInfo(destination, false, baggageKg, 0);
+        price = wagon->getPrice(info);
+    }
+    else if (wagonType.equals("Sleep Wagon"))
+    {
+        checkForCommandEnd(command, readIndex);
+        wagon->reserveSeat(seatId);
+        info = PassengerInfo(destination, false, 0, train->getDistance());
+        price = wagon->getPrice(info);
+    }
+    else
+    {
+        throw std::exception("Invalid wagon type!");
+    }
+    double discount = CardManager::instance()->getDiscount(cardFile, price, info);
+    Ticket ticket(train, wagon, seatId, discount, price - discount);
+    ticket.writeToFile(ticketFile);
+    std::cout << "Ticket successfully bought for Train ID: " << trainId << std::endl;
+    std::cout << "Ticket price: " << price - discount << " lv." << std::endl;
     std::cout << "Ticket saved to file: " << ticketFile << std::endl;
 }
 

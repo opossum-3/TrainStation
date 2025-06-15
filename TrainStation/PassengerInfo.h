@@ -4,6 +4,7 @@
 class PassengerInfo
 {
 public:
+	PassengerInfo();
 	PassengerInfo(const BasicString& destination, bool isFoodIncluded, unsigned baggageKg, double distance);
 	const BasicString& getDestination() const;
 	bool getFoodIncluded() const;

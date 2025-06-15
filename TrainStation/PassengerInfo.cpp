@@ -1,8 +1,11 @@
 #include "PassengerInfo.h"
 
+PassengerInfo::PassengerInfo()
+{
 
+}
 
-PassengerInfo::PassengerInfo(const BasicString& destination, bool isFoodIncluded, 
+PassengerInfo::PassengerInfo(const BasicString& destination, bool isFoodIncluded,
 							 unsigned baggageKg, double distance) :
 							 destination(destination), isFoodIncluded(isFoodIncluded), 
 							 baggageKg(baggageKg), distance(distance)
