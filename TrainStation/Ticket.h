@@ -25,6 +25,4 @@ private:
 
 	double discount;
 	double price;
-
-	size_t getLength(size_t num) const;
 };

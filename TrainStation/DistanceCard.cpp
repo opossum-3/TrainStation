@@ -14,3 +14,8 @@ double DistanceCard::getDiscount(double price, const PassengerInfo& info) const
     }
     return 0.3 * price;
 }
+
+unsigned DistanceCard::getDistance() const
+{
+    return distance;
+}

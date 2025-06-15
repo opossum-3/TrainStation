@@ -13,3 +13,8 @@ double RouteCard::getDiscount(double price, const PassengerInfo& info) const
     }
     return 0;
 }
+
+const BasicString& RouteCard::getRoute() const
+{
+    return route;
+}

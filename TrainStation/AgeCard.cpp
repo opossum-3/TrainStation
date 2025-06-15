@@ -18,3 +18,8 @@ double AgeCard::getDiscount(double price, const PassengerInfo& info) const
     }
     return 0.2 * price;
 }
+
+unsigned AgeCard::getAge() const
+{
+    return age;
+}

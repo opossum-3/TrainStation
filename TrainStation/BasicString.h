@@ -13,6 +13,7 @@ public:
 	const BasicString& operator= (const BasicString& other);
 	~BasicString();
 	static BasicString repeat(char symbol, size_t times);
+	static size_t getNumLength(size_t num);
 	char& operator[] (size_t index);
 	char operator[] (size_t index) const;
 	size_t getLength() const;

@@ -1,5 +1,6 @@
 #include "TrainSystem.h"
 #include "CommandReader.h"
+#include "CardManager.h"
 #include "Wagon.h"
 #include "PassengerInfo.h"
 #include "Ticket.h"
@@ -284,6 +285,48 @@ void TrainSystem::start()
                 unsigned wagonId = CommandReader::readUnsigned(command, readIndex);
                 checkForCommandEnd(command, readIndex);
                 removeWagon(trainId, wagonId);
+                continue;
+            }
+            if (command.startsWith("create-discount-card"))
+            {
+                checkForAdmin();
+                int readIndex = 0;
+                CommandReader::moveIndexByLength("create-discount-card ", readIndex);
+                BasicString cardType = CommandReader::readWord(command, readIndex);
+                readIndex++;
+                BasicString username = CommandReader::readName(command, readIndex);
+                readIndex++;
+                BasicString cardFile = CommandReader::readWord(command, readIndex);
+                if (cardType.equals("age-card"))
+                {
+                    readIndex++;
+                    unsigned age = CommandReader::readUnsigned(command, readIndex);
+                    checkForCommandEnd(command, readIndex);
+                    CardManager::instance()->createAgeCard(username, age, cardFile);
+                }
+                else if (cardType.equals("route-card"))
+                {
+                    readIndex++;
+                    BasicString route = CommandReader::readName(command, readIndex);
+                    Station* station = findStation(route);
+                    if (!station)
+                    {
+                        throw std::exception("Invalid route!");
+                    }
+                    checkForCommandEnd(command, readIndex);
+                    CardManager::instance()->createRouteCard(username, route, cardFile);
+                }
+                else if (cardType.equals("distance-card"))
+                {
+                    readIndex++;
+                    unsigned distance = CommandReader::readUnsigned(command, readIndex);
+                    checkForCommandEnd(command, readIndex);
+                    CardManager::instance()->createDistanceCard(username, distance, cardFile);
+                }
+                else
+                {
+                    throw std::exception("Invalid card type!");
+                }
                 continue;
             }
             throw std::exception("Invalid command!");

@@ -10,3 +10,13 @@ DiscountCard::~DiscountCard()
 {
 
 }
+
+const BasicString& DiscountCard::getName() const
+{
+	return personName;
+}
+
+unsigned DiscountCard::getId() const
+{
+	return cardId;
+}

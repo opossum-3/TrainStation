@@ -49,22 +49,13 @@ void Ticket::writeToFile(const BasicString& file)
 	ofstr << departurePlatform + 1 << '|' << std::endl;
 
 	ofstr << "| Discount: " << std::setprecision(2) << discount;
-	ofstr << std::left << std::setw(width - getLength((size_t)discount) - 13);
+	ofstr << std::left << std::setw(width - BasicString::getNumLength((size_t)discount) - 13);
 	ofstr << " lv." << '|' << std::endl;
 
 	ofstr << "| Price: " << std::setprecision(2) << price;
-	ofstr << std::left << std::setw(width - getLength((size_t)price) - 10);
+	ofstr << std::left << std::setw(width - BasicString::getNumLength((size_t)price) - 10);
 	ofstr << " lv." << '|' << std::endl;
 
 	ofstr << "|==================================|";
 	ofstr.close();
-}
-
-size_t Ticket::getLength(size_t num) const
-{
-	if (num < 10)
-	{
-		return 1;
-	}
-	return getLength(num / 10) + 1;
 }

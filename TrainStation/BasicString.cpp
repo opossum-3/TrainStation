@@ -53,6 +53,15 @@ BasicString BasicString::repeat(char symbol, size_t times)
 	return result;
 }
 
+size_t BasicString::getNumLength(size_t num)
+{
+	if (num < 10)
+	{
+		return 1;
+	}
+	return getNumLength(num / 10) + 1;
+}
+
 void BasicString::copy(const BasicString& other)
 {
 	length = other.length;
