@@ -309,13 +309,14 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
     }
     double price = 0;
     BasicString wagonType = wagon->getType();
+    BasicString destination = train->getArrival().getStation()->getName();
     if (wagonType.equals("First Class"))
     {
         readIndex++;
         bool foodIncluded = CommandReader::readBool(command, readIndex);
         checkForCommandEnd(command, readIndex);
         wagon->reserveSeat(seatId);
-        PassengerInfo info(foodIncluded, 0, 0);
+        PassengerInfo info(destination, foodIncluded, 0, 0);
         price = wagon->getPrice(info);
     }
     else if (wagonType.equals("Second Class"))
@@ -324,14 +325,14 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
         unsigned baggageKg = CommandReader::readUnsigned(command, readIndex);
         checkForCommandEnd(command, readIndex);
         wagon->reserveSeat(seatId);
-        PassengerInfo info(false, baggageKg, 0);
+        PassengerInfo info(destination, false, baggageKg, 0);
         price = wagon->getPrice(info);
     }
     else if (wagonType.equals("Sleep Wagon"))
     {
         checkForCommandEnd(command, readIndex);
         wagon->reserveSeat(seatId);
-        PassengerInfo info(false, 0, train->getDistance());
+        PassengerInfo info(destination, false, 0, train->getDistance());
         price = wagon->getPrice(info);
     }
     else
@@ -365,6 +366,10 @@ void TrainSystem::addWagon(unsigned trainId, BasicString& wagonType, BasicString
     if (wagonType.equals("first-class"))
     {
         double comfortFactor = CommandReader::readDouble(command, readIndex);
+        if (comfortFactor > 1)
+        {
+            throw std::exception("Invalid comfort factor!");
+        }
         checkForCommandEnd(command, readIndex);
         train->addFirstClassWagon(basePrice, comfortFactor);
         return;
