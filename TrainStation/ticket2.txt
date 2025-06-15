@@ -1,0 +1,11 @@
+|===========Train Ticket===========|
+| Ticket: Sofia - Varna            |
+| Train ID: 1000                   |
+| Wagon ID: 1                      |
+| Seat ID: 2                       |
+| Departure time: 11/11/2000 10:00 |
+| Arrival time: 11/11/2000 16:00   |
+| Departure platform: 1            |
+| Discount: 10 lv.                 |
+| Price: 10 lv.                    |
+|==================================|
