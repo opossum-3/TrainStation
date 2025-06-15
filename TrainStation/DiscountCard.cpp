@@ -3,7 +3,10 @@
 DiscountCard::DiscountCard(const BasicString& personName, unsigned cardId) : 
 						   personName(personName), cardId(cardId)
 {
-
+	if (cardId < 100000 || cardId > 999999)
+	{
+		throw std::exception("Card ID should be 6-digit!");
+	}
 }
 
 DiscountCard::~DiscountCard()

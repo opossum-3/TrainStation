@@ -21,6 +21,7 @@ void CardManager::createAgeCard(const BasicString& personName, unsigned age, con
 	std::ofstream ofstr(file.getStr());
 	saveAgeCard(ofstr, card);
 	ofstr.close();
+	validCardList.push_back(card.getId());
 	std::cout << "Age card created successfully in file: " << file << std::endl;
 }
 
@@ -31,6 +32,7 @@ void CardManager::createRouteCard(const BasicString& personName,
 	std::ofstream ofstr(file.getStr());
 	saveRouteCard(ofstr, card);
 	ofstr.close();
+	validCardList.push_back(card.getId());
 	std::cout << "Route card created successfully in file: " << file << std::endl;
 }
 
@@ -41,6 +43,7 @@ void CardManager::createDistanceCard(const BasicString& personName,
 	std::ofstream ofstr(file.getStr());
 	saveDistanceCard(ofstr, card);
 	ofstr.close();
+	validCardList.push_back(card.getId());
 	std::cout << "Distance card created successfully in file: " << file << std::endl;
 }
 
@@ -57,31 +60,38 @@ double CardManager::getDiscount(const BasicString& cardFile, double price, const
 	if (line.equals("|===Age card===|"))
 	{
 		AgeCard* card = loadAgeCard(ifstr);
-		cards.push_back(card);
+		if (!isValidCard(card->getId()))
+		{
+			throw std::exception("Invalid discount card!");
+		}
+		double discount = card->getDiscount(price, info);
 		ifstr.close();
-		return card->getDiscount(price, info);
+		delete[] card;
+		return discount;
 	}
 	if (line.equals("|===Route card===|"))
 	{
 		RouteCard* card = loadRouteCard(ifstr);
-		cards.push_back(card);
+		double discount = card->getDiscount(price, info);
 		ifstr.close();
-		return card->getDiscount(price, info);
+		delete[] card;
+		return discount;
 	}
 	if (line.equals("|==Distance card==|"))
 	{
 		DistanceCard* card = loadDistanceCard(ifstr);
-		cards.push_back(card);
+		double discount = card->getDiscount(price, info);
 		ifstr.close();
-		return card->getDiscount(price, info);
+		delete[] card;
+		return discount;
 	}
 	throw std::exception("Invalid discount card file!");
 	return 0;
 }
 
-CardManager::CardManager() : currentCardId(100000), cards()
+CardManager::CardManager() : currentCardId(100000), validCardList()
 {
-	
+	loadValidCardList();
 }
 
 void CardManager::saveAgeCard(std::ofstream& ofstr, const AgeCard& card)
@@ -134,6 +144,19 @@ void CardManager::saveDistanceCard(std::ofstream& ofstr, const DistanceCard& car
 	ofstr << "| " << std::left << std::setw(width - 3) << card.getId() << '|' << std::endl;
 
 	ofstr << "|=================|";
+}
+
+void CardManager::saveValidCardList()
+{
+	std::ofstream ofstr("validCardList.txt", std::ios::trunc);
+	checkFile(ofstr);
+	size_t count = validCardList.getSize();
+	ofstr << count << std::endl;
+	for (size_t i = 0; i < count; i++)
+	{
+		ofstr << validCardList[i] << std::endl;
+	}
+	ofstr.close();
 }
 
 AgeCard* CardManager::loadAgeCard(std::ifstream& ifstr)
@@ -199,10 +222,41 @@ DistanceCard* CardManager::loadDistanceCard(std::ifstream& ifstr)
 	return new DistanceCard(name, distance, cardId);
 }
 
+void CardManager::loadValidCardList()
+{
+	std::ifstream ifstr("validCardList.txt");
+	if (!ifstr.is_open())
+	{
+		return;
+	}
+	size_t count = 0;
+	ifstr >> count;
+	for (size_t i = 0; i < count; i++)
+	{
+		unsigned cardId = 0;
+		ifstr >> cardId;
+		validCardList.push_back(cardId);
+	}
+	ifstr.close();
+}
+
 void CardManager::checkFile(std::ofstream& ofstr)
 {
 	if (!ofstr.is_open())
 	{
 		throw std::exception("File error!");
 	}
+}
+
+bool CardManager::isValidCard(unsigned cardId)
+{
+	size_t count = validCardList.getSize();
+	for (size_t i = 0; i < count; i++)
+	{
+		if (validCardList[i] == cardId)
+		{
+			return true;
+		}
+	}
+	return false;
 }

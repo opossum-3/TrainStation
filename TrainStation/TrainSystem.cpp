@@ -127,6 +127,7 @@ void TrainSystem::start()
             std::cin >> command;
             if (command.equals("exit"))
             {
+                CardManager::instance()->saveValidCardList();
                 break;
             }
             if (command.equals("print-stations"))
@@ -375,7 +376,6 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
         readIndex++;
         bool foodIncluded = CommandReader::readBool(command, readIndex);
         checkForCommandEnd(command, readIndex);
-        wagon->reserveSeat(seatId);
         PassengerInfo info(destination, foodIncluded, 0, 0);
         price = wagon->getPrice(info);
     }
@@ -384,14 +384,12 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
         readIndex++;
         unsigned baggageKg = CommandReader::readUnsigned(command, readIndex);
         checkForCommandEnd(command, readIndex);
-        wagon->reserveSeat(seatId);
         PassengerInfo info(destination, false, baggageKg, 0);
         price = wagon->getPrice(info);
     }
     else if (wagonType.equals("Sleep Wagon"))
     {
         checkForCommandEnd(command, readIndex);
-        wagon->reserveSeat(seatId);
         PassengerInfo info(destination, false, 0, train->getDistance());
         price = wagon->getPrice(info);
     }
@@ -401,6 +399,7 @@ void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int t
     }
     Ticket ticket(train, wagon, seatId, 0, price);
     ticket.writeToFile(ticketFile);
+    wagon->reserveSeat(seatId);
     std::cout << "Ticket successfully bought for Train ID: " << trainId << std::endl;
     std::cout << "Ticket price: " << price << " lv." << std::endl;
     std::cout << "Ticket saved to file: " << ticketFile << std::endl;
@@ -429,7 +428,6 @@ void TrainSystem::buyTicketDiscount(BasicString& command, int& readIndex, unsign
         readIndex++;
         bool foodIncluded = CommandReader::readBool(command, readIndex);
         checkForCommandEnd(command, readIndex);
-        wagon->reserveSeat(seatId);
         info = PassengerInfo(destination, foodIncluded, 0, 0);
         price = wagon->getPrice(info);
     }
@@ -438,14 +436,12 @@ void TrainSystem::buyTicketDiscount(BasicString& command, int& readIndex, unsign
         readIndex++;
         unsigned baggageKg = CommandReader::readUnsigned(command, readIndex);
         checkForCommandEnd(command, readIndex);
-        wagon->reserveSeat(seatId);
         info = PassengerInfo(destination, false, baggageKg, 0);
         price = wagon->getPrice(info);
     }
     else if (wagonType.equals("Sleep Wagon"))
     {
         checkForCommandEnd(command, readIndex);
-        wagon->reserveSeat(seatId);
         info = PassengerInfo(destination, false, 0, train->getDistance());
         price = wagon->getPrice(info);
     }
@@ -456,6 +452,7 @@ void TrainSystem::buyTicketDiscount(BasicString& command, int& readIndex, unsign
     double discount = CardManager::instance()->getDiscount(cardFile, price, info);
     Ticket ticket(train, wagon, seatId, discount, price - discount);
     ticket.writeToFile(ticketFile);
+    wagon->reserveSeat(seatId);
     std::cout << "Ticket successfully bought for Train ID: " << trainId << std::endl;
     std::cout << "Ticket price: " << price - discount << " lv." << std::endl;
     std::cout << "Ticket saved to file: " << ticketFile << std::endl;

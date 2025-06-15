@@ -17,11 +17,13 @@ public:
 	void createDistanceCard(const BasicString& personName, unsigned distance, const BasicString& file);
 
 	double getDiscount(const BasicString& cardFile, double price, const PassengerInfo& info);
+	bool isValidCard(unsigned cardId);
+	void saveValidCardList();
 private:
 	CardManager();
 	static CardManager* manager;
 	unsigned currentCardId;
-	BasicVector<DiscountCard*> cards;
+	BasicVector<unsigned> validCardList;
 	void checkFile(std::ofstream& ofstr);
 
 	void saveAgeCard(std::ofstream& ofstr, const AgeCard& card);
@@ -31,4 +33,5 @@ private:
 	AgeCard* loadAgeCard(std::ifstream& ifstr);
 	RouteCard* loadRouteCard(std::ifstream& ifstr);
 	DistanceCard* loadDistanceCard(std::ifstream& ifstr);
+	void loadValidCardList();
 };
