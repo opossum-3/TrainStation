@@ -19,6 +19,7 @@ public:
 	double getDiscount(const BasicString& cardFile, double price, const PassengerInfo& info);
 	bool isValidCard(unsigned cardId);
 	void saveValidCardList();
+	static void free();
 private:
 	CardManager();
 	static CardManager* manager;

@@ -7,4 +7,5 @@
 int main()
 {
 	TrainSystem::instance()->start();
+	TrainSystem::free();
 }

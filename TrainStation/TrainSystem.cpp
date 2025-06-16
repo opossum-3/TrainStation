@@ -519,6 +519,12 @@ void TrainSystem::buyTicketDiscount(BasicString& command, int& readIndex, unsign
     std::cout << "Ticket saved to file: " << ticketFile << std::endl;
 }
 
+void TrainSystem::free()
+{
+    CardManager::free();
+    delete system;
+}
+
 void TrainSystem::removeWagon(unsigned trainId, unsigned wagonId)
 {
     Train* train = findTrain(trainId);

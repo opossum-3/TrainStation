@@ -159,6 +159,11 @@ void CardManager::saveValidCardList()
 	ofstr.close();
 }
 
+void CardManager::free()
+{
+	delete manager;
+}
+
 AgeCard* CardManager::loadAgeCard(std::ifstream& ifstr)
 {
 	char buffer[INPUT_BUFFER_SIZE];

@@ -18,7 +18,7 @@ public:
 		unsigned int trainId, unsigned int wagonId, 
 		unsigned int seatId, BasicString& ticketFile,
 		BasicString& cardFile);
-	
+	static void free();
 private:
 	static TrainSystem* system;
 	TrainSystem();
