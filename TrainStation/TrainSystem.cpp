@@ -411,6 +411,9 @@ void TrainSystem::moveWagon(unsigned int sourceTrainId, unsigned int destination
     {
         throw std::exception("Trains already departed!");
     }
+    Wagon* copy = wagon->clone();
+    source->removeWagon(wagonId);
+    destination->addWagon(copy);
 }
 
 void TrainSystem::buyTicket(BasicString& command, int& readIndex, unsigned int trainId, 

@@ -13,6 +13,7 @@ public:
 	BasicString getType() const override;
 	void serialize(std::ofstream& ofstr) const override;
 	void deserialize(std::ifstream& ifstr) override;
+	Wagon* clone() override;
 private:
 	bool foodIncluded;
 	double comfortFactor;

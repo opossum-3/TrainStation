@@ -12,6 +12,7 @@ public:
 	BasicString getType() const override;
 	void serialize(std::ofstream& ofstr) const override;
 	void deserialize(std::ifstream& ifstr) override;
+	Wagon* clone() override;
 private:
 	unsigned pricePer100km;
 	size_t getRowsCount() const override;

@@ -109,6 +109,15 @@ void Train::addSleepWagon(unsigned basePrice, unsigned pricePer100km)
 	std::cout << "Added Sleep Wagon with ID: " << currentWagonId - 1 << std::endl;
 }
 
+void Train::addWagon(Wagon* wagon)
+{
+	if (!wagon)
+	{
+		throw std::exception("Invalid argument!");
+	}
+	wagons.push_back(wagon);
+}
+
 void Train::removeWagon(unsigned wagonId)
 {
 	size_t count = wagons.getSize();
@@ -116,6 +125,7 @@ void Train::removeWagon(unsigned wagonId)
 	{
 		if (wagons[i]->getWagonId() == wagonId)
 		{
+			delete[] wagons[i];
 			wagons.removeAt(i);
 			std::cout << "Wagon removed successfully." << std::endl;
 			return;

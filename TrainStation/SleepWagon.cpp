@@ -58,6 +58,12 @@ void SleepWagon::deserialize(std::ifstream& ifstr)
 	ifstr.read(reinterpret_cast<char*>(&pricePer100km), sizeof(pricePer100km));
 }
 
+Wagon* SleepWagon::clone()
+{
+	SleepWagon* copy = new SleepWagon(wagonId, basePrice, pricePer100km);
+	return copy;
+}
+
 size_t SleepWagon::getRowsCount() const
 {
 	return 5;

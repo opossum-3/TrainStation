@@ -62,6 +62,12 @@ void FirstClassWagon::deserialize(std::ifstream& ifstr)
 	ifstr.read(reinterpret_cast<char*>(&comfortFactor), sizeof(comfortFactor));
 }
 
+Wagon* FirstClassWagon::clone()
+{
+	FirstClassWagon* wagon = new FirstClassWagon(wagonId, basePrice, comfortFactor);
+	return wagon;
+}
+
 size_t FirstClassWagon::getRowsCount() const
 {
 	return 5;

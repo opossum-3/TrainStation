@@ -57,6 +57,12 @@ void SecondClassWagon::deserialize(std::ifstream& ifstr)
 	ifstr.read(reinterpret_cast<char*>(&pricePerKg), sizeof(pricePerKg));
 }
 
+Wagon* SecondClassWagon::clone()
+{
+	SecondClassWagon* wagon = new SecondClassWagon(wagonId, basePrice, pricePerKg);
+	return wagon;
+}
+
 size_t SecondClassWagon::getRowsCount() const
 {
 	return 5;
